@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Clock, Trash2, ExternalLink } from 'lucide-react';
 import CopyButton from './CopyButton';
 import { HistoryItem } from '@/types';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const HISTORY_COOKIE_KEY = 'url_history';
 
@@ -28,6 +29,7 @@ interface HistoryListProps {
 }
 
 export default function HistoryList({ refreshTrigger }: HistoryListProps) {
+  const { t } = useLanguage();
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [mounted, setMounted] = useState(false);
 
@@ -46,7 +48,7 @@ export default function HistoryList({ refreshTrigger }: HistoryListProps) {
 
   return (
     <section style={{ marginTop: '40px', width: '100%' }}>
-      {/* Section header */}
+      {/* Header */}
       <div
         style={{
           display: 'flex',
@@ -62,12 +64,12 @@ export default function HistoryList({ refreshTrigger }: HistoryListProps) {
               fontSize: '13px',
               fontWeight: 700,
               color: 'var(--text-secondary)',
-              fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+              fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
               letterSpacing: '0.04em',
               textTransform: 'uppercase',
             }}
           >
-            Recent Links
+            {t.recentLinks}
           </span>
           <span
             style={{
@@ -77,7 +79,7 @@ export default function HistoryList({ refreshTrigger }: HistoryListProps) {
               background: 'var(--bg-subtle)',
               borderRadius: '20px',
               padding: '2px 8px',
-              fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+              fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
             }}
           >
             {history.length}
@@ -101,20 +103,20 @@ export default function HistoryList({ refreshTrigger }: HistoryListProps) {
             cursor: 'pointer',
             padding: '4px 8px',
             borderRadius: '8px',
-            fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+            fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
             transition: 'all 0.15s ease',
           }}
-          onMouseEnter={e => {
+          onMouseEnter={(e) => {
             (e.currentTarget as HTMLButtonElement).style.color = '#B05A5A';
             (e.currentTarget as HTMLButtonElement).style.background = '#FBF0F0';
           }}
-          onMouseLeave={e => {
+          onMouseLeave={(e) => {
             (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-muted)';
             (e.currentTarget as HTMLButtonElement).style.background = 'none';
           }}
         >
           <Trash2 size={13} strokeWidth={2} />
-          Clear
+          {t.clear}
         </button>
       </div>
 
@@ -135,16 +137,15 @@ export default function HistoryList({ refreshTrigger }: HistoryListProps) {
               transition: 'border-color 0.2s, box-shadow 0.2s',
               animationDelay: `${i * 0.04}s`,
             }}
-            onMouseEnter={e => {
+            onMouseEnter={(e) => {
               (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border-hover)';
               (e.currentTarget as HTMLDivElement).style.boxShadow = '0 2px 8px rgba(44,32,20,0.07)';
             }}
-            onMouseLeave={e => {
+            onMouseLeave={(e) => {
               (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border)';
               (e.currentTarget as HTMLDivElement).style.boxShadow = 'none';
             }}
           >
-            {/* Icon */}
             <div
               style={{
                 width: '34px',
@@ -160,7 +161,6 @@ export default function HistoryList({ refreshTrigger }: HistoryListProps) {
               <ExternalLink size={15} strokeWidth={2} style={{ color: 'var(--accent)' }} />
             </div>
 
-            {/* URLs */}
             <div style={{ flex: 1, minWidth: 0 }}>
               <a
                 href={item.short_url}
@@ -172,7 +172,7 @@ export default function HistoryList({ refreshTrigger }: HistoryListProps) {
                   fontWeight: 700,
                   color: 'var(--accent)',
                   textDecoration: 'none',
-                  fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+                  fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
@@ -185,7 +185,7 @@ export default function HistoryList({ refreshTrigger }: HistoryListProps) {
                 style={{
                   fontSize: '12px',
                   color: 'var(--text-muted)',
-                  fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+                  fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
@@ -196,7 +196,6 @@ export default function HistoryList({ refreshTrigger }: HistoryListProps) {
               </p>
             </div>
 
-            {/* Copy */}
             <div style={{ flexShrink: 0 }}>
               <CopyButton text={item.short_url} size="sm" />
             </div>
@@ -210,10 +209,10 @@ export default function HistoryList({ refreshTrigger }: HistoryListProps) {
           marginTop: '14px',
           fontSize: '12px',
           color: 'var(--text-muted)',
-          fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+          fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
         }}
       >
-        Saved locally in your browser
+        {t.savedLocally}
       </p>
     </section>
   );

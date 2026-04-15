@@ -1,12 +1,21 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Link2 } from 'lucide-react';
 import UrlShortenerForm from '@/components/UrlShortenerForm';
 import HistoryList from '@/components/HistoryList';
+import { useLanguage, Language } from '@/contexts/LanguageContext';
+
+const LANG_LABELS: { code: Language; label: string }[] = [
+  { code: 'en', label: 'EN' },
+  { code: 'th', label: 'TH' },
+  { code: 'ja', label: 'JA' },
+];
 
 export default function Home() {
   const [historyTrigger, setHistoryTrigger] = useState(0);
+  const { lang, setLang, t } = useLanguage();
 
   return (
     <div
@@ -15,13 +24,14 @@ export default function Home() {
         background: 'var(--bg)',
         display: 'flex',
         flexDirection: 'column',
+        fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
       }}
     >
       {/* Header */}
       <header
         style={{
           borderBottom: '1px solid var(--border)',
-          background: 'rgba(250,247,242,0.85)',
+          background: 'rgba(250,247,242,0.88)',
           backdropFilter: 'blur(12px)',
           position: 'sticky',
           top: 0,
@@ -39,6 +49,7 @@ export default function Home() {
             justifyContent: 'space-between',
           }}
         >
+          {/* Logo */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
             <div
               style={{
@@ -58,7 +69,6 @@ export default function Home() {
                 fontSize: '18px',
                 fontWeight: 800,
                 color: 'var(--text-primary)',
-                fontFamily: 'var(--font-nunito), Nunito, sans-serif',
                 letterSpacing: '-0.02em',
               }}
             >
@@ -66,20 +76,78 @@ export default function Home() {
             </span>
           </div>
 
-          <span
-            style={{
-              fontSize: '12px',
-              fontWeight: 600,
-              color: 'var(--text-muted)',
-              background: 'var(--bg-subtle)',
-              border: '1px solid var(--border)',
-              borderRadius: '20px',
-              padding: '4px 12px',
-              fontFamily: 'var(--font-nunito), Nunito, sans-serif',
-            }}
-          >
-            Free · No signup
-          </span>
+          {/* Nav right */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* About link */}
+            <Link
+              href="/about"
+              style={{
+                fontSize: '13px',
+                fontWeight: 600,
+                color: 'var(--text-secondary)',
+                textDecoration: 'none',
+                padding: '5px 12px',
+                borderRadius: '20px',
+                border: '1px solid transparent',
+                transition: 'all 0.15s',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLAnchorElement).style.background = 'var(--bg-subtle)';
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'var(--border)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLAnchorElement).style.background = 'transparent';
+                (e.currentTarget as HTMLAnchorElement).style.borderColor = 'transparent';
+              }}
+            >
+              {t.aboutLink}
+            </Link>
+
+            {/* Divider */}
+            <div
+              style={{
+                width: '1px',
+                height: '18px',
+                background: 'var(--border)',
+              }}
+            />
+
+            {/* Language switcher */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+              {LANG_LABELS.map(({ code, label }) => (
+                <button
+                  key={code}
+                  onClick={() => setLang(code)}
+                  style={{
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    padding: '4px 9px',
+                    borderRadius: '20px',
+                    border: lang === code ? '1px solid var(--accent)' : '1px solid transparent',
+                    background: lang === code ? 'var(--accent-light)' : 'transparent',
+                    color: lang === code ? 'var(--accent)' : 'var(--text-muted)',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s',
+                    fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
+                  }}
+                  onMouseEnter={e => {
+                    if (lang !== code) {
+                      (e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-subtle)';
+                      (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-secondary)';
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (lang !== code) {
+                      (e.currentTarget as HTMLButtonElement).style.background = 'transparent';
+                      (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-muted)';
+                    }
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </header>
 
@@ -90,73 +158,24 @@ export default function Home() {
           maxWidth: '680px',
           width: '100%',
           margin: '0 auto',
-          padding: '64px 24px 80px',
+          padding: '56px 24px 80px',
         }}
       >
-        {/* Hero */}
-        <div style={{ textAlign: 'center', marginBottom: '44px' }}>
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '7px',
-              background: 'var(--accent-light)',
-              border: '1px solid var(--border)',
-              borderRadius: '20px',
-              padding: '5px 14px',
-              marginBottom: '24px',
-            }}
-          >
-            <div
-              style={{
-                width: '6px',
-                height: '6px',
-                borderRadius: '50%',
-                background: 'var(--accent)',
-              }}
-            />
-            <span
-              style={{
-                fontSize: '12px',
-                fontWeight: 700,
-                color: 'var(--accent)',
-                fontFamily: 'var(--font-nunito), Nunito, sans-serif',
-                letterSpacing: '0.03em',
-              }}
-            >
-              Instant · Free · No account needed
-            </span>
-          </div>
-
+        {/* Hero — minimal */}
+        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
           <h1
             style={{
-              fontSize: 'clamp(32px, 6vw, 48px)',
+              fontSize: 'clamp(28px, 6vw, 44px)',
               fontWeight: 800,
               color: 'var(--text-primary)',
-              fontFamily: 'var(--font-nunito), Nunito, sans-serif',
-              lineHeight: 1.15,
+              lineHeight: 1.2,
               letterSpacing: '-0.03em',
-              margin: '0 0 16px',
+              margin: '0 0 8px',
             }}
           >
-            Shorten your URLs{' '}
-            <span style={{ color: 'var(--accent)' }}>beautifully</span>
+            {t.heading}{' '}
+            <span style={{ color: 'var(--accent)' }}>{t.headingAccent}</span>
           </h1>
-
-          <p
-            style={{
-              fontSize: '16px',
-              color: 'var(--text-secondary)',
-              fontFamily: 'var(--font-nunito), Nunito, sans-serif',
-              fontWeight: 500,
-              lineHeight: 1.6,
-              maxWidth: '420px',
-              margin: '0 auto',
-            }}
-          >
-            Paste a long URL and get a clean, shareable link in seconds.
-            Your history stays in your browser — no account needed.
-          </p>
         </div>
 
         {/* Form card */}
@@ -177,18 +196,14 @@ export default function Home() {
         <div
           style={{
             display: 'flex',
-            gap: '10px',
+            gap: '8px',
             justifyContent: 'center',
             flexWrap: 'wrap',
           }}
         >
-          {[
-            { label: 'Lightning fast' },
-            { label: 'Cookie-based history' },
-            { label: 'Click tracking' },
-          ].map((f) => (
+          {t.pills.map((label) => (
             <span
-              key={f.label}
+              key={label}
               style={{
                 fontSize: '12px',
                 fontWeight: 600,
@@ -196,11 +211,10 @@ export default function Home() {
                 background: 'var(--bg-subtle)',
                 border: '1px solid var(--border)',
                 borderRadius: '20px',
-                padding: '5px 12px',
-                fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+                padding: '4px 12px',
               }}
             >
-              {f.label}
+              {label}
             </span>
           ))}
         </div>
@@ -242,26 +256,12 @@ export default function Home() {
             >
               <Link2 size={11} strokeWidth={2.5} color="#fff" />
             </div>
-            <span
-              style={{
-                fontSize: '14px',
-                fontWeight: 800,
-                color: 'var(--text-primary)',
-                fontFamily: 'var(--font-nunito), Nunito, sans-serif',
-              }}
-            >
+            <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-primary)' }}>
               Bexo
             </span>
           </div>
-          <p
-            style={{
-              fontSize: '12px',
-              color: 'var(--text-muted)',
-              fontFamily: 'var(--font-nunito), Nunito, sans-serif',
-              margin: 0,
-            }}
-          >
-            Your links, your data. Always free.
+          <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0 }}>
+            {t.footerText}
           </p>
         </div>
       </footer>
