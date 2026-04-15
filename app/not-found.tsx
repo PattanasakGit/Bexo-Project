@@ -1,19 +1,102 @@
 import Link from 'next/link';
+import { Link2, ArrowLeft } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="text-center">
-        <p className="text-6xl font-light text-gray-200 mb-4">404</p>
-        <h1 className="text-2xl font-semibold text-gray-900 mb-2">Link not found</h1>
-        <p className="text-gray-500 mb-8">
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'var(--bg)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px',
+        fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+      }}
+    >
+      <div
+        style={{
+          background: 'var(--bg-card)',
+          border: '1.5px solid var(--border)',
+          borderRadius: '24px',
+          padding: '48px 40px',
+          textAlign: 'center',
+          maxWidth: '400px',
+          width: '100%',
+          boxShadow: '0 4px 24px rgba(44,32,20,0.08)',
+        }}
+      >
+        <div
+          style={{
+            width: '56px',
+            height: '56px',
+            borderRadius: '16px',
+            background: 'var(--accent-light)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 24px',
+          }}
+        >
+          <Link2 size={24} strokeWidth={2} style={{ color: 'var(--accent)' }} />
+        </div>
+
+        <p
+          style={{
+            fontSize: '13px',
+            fontWeight: 700,
+            color: 'var(--text-muted)',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+            margin: '0 0 10px',
+          }}
+        >
+          404
+        </p>
+
+        <h1
+          style={{
+            fontSize: '24px',
+            fontWeight: 800,
+            color: 'var(--text-primary)',
+            margin: '0 0 10px',
+            letterSpacing: '-0.02em',
+          }}
+        >
+          Link not found
+        </h1>
+
+        <p
+          style={{
+            fontSize: '15px',
+            color: 'var(--text-secondary)',
+            fontWeight: 500,
+            lineHeight: 1.6,
+            margin: '0 0 28px',
+          }}
+        >
           This short link doesn&apos;t exist or may have been removed.
         </p>
+
         <Link
           href="/"
-          className="inline-flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-indigo-700 transition-colors duration-200"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'var(--accent)',
+            color: '#fff',
+            padding: '12px 24px',
+            borderRadius: '12px',
+            fontWeight: 700,
+            fontSize: '14px',
+            textDecoration: 'none',
+            transition: 'background 0.2s',
+          }}
         >
-          ← Create a new short link
+          <ArrowLeft size={15} strokeWidth={2.5} />
+          Back to Bexo
         </Link>
       </div>
     </div>
