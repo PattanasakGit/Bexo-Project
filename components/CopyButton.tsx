@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Copy, Check } from 'lucide-react';
 
 interface CopyButtonProps {
   text: string;
@@ -13,10 +14,7 @@ export default function CopyButton({ text, size = 'md' }: CopyButtonProps) {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(text);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
     } catch {
-      // Fallback for older browsers
       const textarea = document.createElement('textarea');
       textarea.value = text;
       textarea.style.position = 'fixed';
@@ -25,9 +23,9 @@ export default function CopyButton({ text, size = 'md' }: CopyButtonProps) {
       textarea.select();
       document.execCommand('copy');
       document.body.removeChild(textarea);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
     }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
   };
 
   const isSmall = size === 'sm';
@@ -36,45 +34,43 @@ export default function CopyButton({ text, size = 'md' }: CopyButtonProps) {
     <button
       onClick={handleCopy}
       aria-label={copied ? 'Copied!' : 'Copy to clipboard'}
-      className={`
-        inline-flex items-center gap-1.5 font-medium rounded-lg transition-all duration-200
-        ${isSmall
-          ? 'px-2.5 py-1.5 text-xs'
-          : 'px-4 py-2 text-sm'
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '6px',
+        fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+        fontWeight: 600,
+        fontSize: isSmall ? '12px' : '13px',
+        padding: isSmall ? '5px 10px' : '7px 14px',
+        borderRadius: '10px',
+        border: `1.5px solid ${copied ? '#B8D4A8' : 'var(--border)'}`,
+        background: copied ? 'var(--success-light)' : 'var(--bg)',
+        color: copied ? 'var(--success)' : 'var(--text-secondary)',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+        whiteSpace: 'nowrap',
+      }}
+      onMouseEnter={e => {
+        if (!copied) {
+          (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--accent)';
+          (e.currentTarget as HTMLButtonElement).style.color = 'var(--accent)';
+          (e.currentTarget as HTMLButtonElement).style.background = 'var(--accent-light)';
         }
-        ${copied
-          ? 'bg-green-50 text-green-700 border border-green-200'
-          : 'bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 hover:border-indigo-300'
+      }}
+      onMouseLeave={e => {
+        if (!copied) {
+          (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--border)';
+          (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-secondary)';
+          (e.currentTarget as HTMLButtonElement).style.background = 'var(--bg)';
         }
-      `}
+      }}
     >
       {copied ? (
-        <>
-          <CheckIcon className={isSmall ? 'w-3 h-3' : 'w-4 h-4'} />
-          Copied!
-        </>
+        <Check size={isSmall ? 12 : 14} strokeWidth={2.5} />
       ) : (
-        <>
-          <CopyIcon className={isSmall ? 'w-3 h-3' : 'w-4 h-4'} />
-          Copy
-        </>
+        <Copy size={isSmall ? 12 : 14} strokeWidth={2} />
       )}
+      {copied ? 'Copied' : 'Copy'}
     </button>
-  );
-}
-
-function CopyIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-    </svg>
-  );
-}
-
-function CheckIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-    </svg>
   );
 }

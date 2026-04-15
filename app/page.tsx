@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Link2 } from 'lucide-react';
 import UrlShortenerForm from '@/components/UrlShortenerForm';
 import HistoryList from '@/components/HistoryList';
 
@@ -8,79 +9,259 @@ export default function Home() {
   const [historyTrigger, setHistoryTrigger] = useState(0);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'var(--bg)',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       {/* Header */}
-      <header className="w-full border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-              </svg>
+      <header
+        style={{
+          borderBottom: '1px solid var(--border)',
+          background: 'rgba(250,247,242,0.85)',
+          backdropFilter: 'blur(12px)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 10,
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '680px',
+            margin: '0 auto',
+            padding: '0 24px',
+            height: '60px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '9px' }}>
+            <div
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '10px',
+                background: 'var(--accent)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Link2 size={16} strokeWidth={2.5} color="#fff" />
             </div>
-            <span className="text-lg font-bold text-gray-900 tracking-tight">Bexo</span>
+            <span
+              style={{
+                fontSize: '18px',
+                fontWeight: 800,
+                color: 'var(--text-primary)',
+                fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+                letterSpacing: '-0.02em',
+              }}
+            >
+              Bexo
+            </span>
           </div>
-          <span className="text-xs text-gray-400 font-medium bg-gray-100 px-2.5 py-1 rounded-full">
+
+          <span
+            style={{
+              fontSize: '12px',
+              fontWeight: 600,
+              color: 'var(--text-muted)',
+              background: 'var(--bg-subtle)',
+              border: '1px solid var(--border)',
+              borderRadius: '20px',
+              padding: '4px 12px',
+              fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+            }}
+          >
             Free · No signup
           </span>
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="flex-1 w-full max-w-2xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+      {/* Main */}
+      <main
+        style={{
+          flex: 1,
+          maxWidth: '680px',
+          width: '100%',
+          margin: '0 auto',
+          padding: '64px 24px 80px',
+        }}
+      >
         {/* Hero */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-5 border border-indigo-100">
-            <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full" />
-            Instant · Free · No account needed
+        <div style={{ textAlign: 'center', marginBottom: '44px' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '7px',
+              background: 'var(--accent-light)',
+              border: '1px solid var(--border)',
+              borderRadius: '20px',
+              padding: '5px 14px',
+              marginBottom: '24px',
+            }}
+          >
+            <div
+              style={{
+                width: '6px',
+                height: '6px',
+                borderRadius: '50%',
+                background: 'var(--accent)',
+              }}
+            />
+            <span
+              style={{
+                fontSize: '12px',
+                fontWeight: 700,
+                color: 'var(--accent)',
+                fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+                letterSpacing: '0.03em',
+              }}
+            >
+              Instant · Free · No account needed
+            </span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight leading-tight mb-4">
-            Shorten your URLs
-            <span className="text-indigo-600"> instantly</span>
+
+          <h1
+            style={{
+              fontSize: 'clamp(32px, 6vw, 48px)',
+              fontWeight: 800,
+              color: 'var(--text-primary)',
+              fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+              lineHeight: 1.15,
+              letterSpacing: '-0.03em',
+              margin: '0 0 16px',
+            }}
+          >
+            Shorten your URLs{' '}
+            <span style={{ color: 'var(--accent)' }}>beautifully</span>
           </h1>
-          <p className="text-lg text-gray-500 leading-relaxed max-w-md mx-auto">
-            Paste a long link, get a short one. No signup, no hassle.
-            Your link history is saved locally in your browser.
+
+          <p
+            style={{
+              fontSize: '16px',
+              color: 'var(--text-secondary)',
+              fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+              fontWeight: 500,
+              lineHeight: 1.6,
+              maxWidth: '420px',
+              margin: '0 auto',
+            }}
+          >
+            Paste a long URL and get a clean, shareable link in seconds.
+            Your history stays in your browser — no account needed.
           </p>
         </div>
 
-        {/* Shortener Card */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
+        {/* Form card */}
+        <div
+          style={{
+            background: 'var(--bg-card)',
+            border: '1.5px solid var(--border)',
+            borderRadius: '20px',
+            padding: '28px',
+            boxShadow: '0 4px 24px rgba(44,32,20,0.07)',
+            marginBottom: '16px',
+          }}
+        >
           <UrlShortenerForm onHistoryUpdate={() => setHistoryTrigger((n) => n + 1)} />
         </div>
 
-        {/* Features row */}
-        <div className="grid grid-cols-3 gap-4 mt-8">
+        {/* Feature pills */}
+        <div
+          style={{
+            display: 'flex',
+            gap: '10px',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
           {[
-            { icon: '⚡', label: 'Instant', desc: 'No waiting' },
-            { icon: '🔒', label: 'Private', desc: 'No tracking' },
-            { icon: '📋', label: 'History', desc: 'Local only' },
-          ].map((feature) => (
-            <div key={feature.label} className="text-center py-4">
-              <div className="text-2xl mb-1">{feature.icon}</div>
-              <p className="text-xs font-semibold text-gray-700">{feature.label}</p>
-              <p className="text-xs text-gray-400">{feature.desc}</p>
-            </div>
+            { label: 'Lightning fast' },
+            { label: 'Cookie-based history' },
+            { label: 'Click tracking' },
+          ].map((f) => (
+            <span
+              key={f.label}
+              style={{
+                fontSize: '12px',
+                fontWeight: 600,
+                color: 'var(--text-muted)',
+                background: 'var(--bg-subtle)',
+                border: '1px solid var(--border)',
+                borderRadius: '20px',
+                padding: '5px 12px',
+                fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+              }}
+            >
+              {f.label}
+            </span>
           ))}
         </div>
 
-        {/* History section */}
+        {/* History */}
         <HistoryList refreshTrigger={historyTrigger} />
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t border-gray-100 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 bg-indigo-600 rounded flex items-center justify-center">
-              <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-              </svg>
+      <footer
+        style={{
+          borderTop: '1px solid var(--border)',
+          background: 'var(--bg-card)',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '680px',
+            margin: '0 auto',
+            padding: '20px 24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '8px',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div
+              style={{
+                width: '22px',
+                height: '22px',
+                borderRadius: '7px',
+                background: 'var(--accent)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Link2 size={11} strokeWidth={2.5} color="#fff" />
             </div>
-            <span className="text-sm font-semibold text-gray-700">Bexo</span>
+            <span
+              style={{
+                fontSize: '14px',
+                fontWeight: 800,
+                color: 'var(--text-primary)',
+                fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+              }}
+            >
+              Bexo
+            </span>
           </div>
-          <p className="text-xs text-gray-400">
-            Free URL shortener. Your links, your data.
+          <p
+            style={{
+              fontSize: '12px',
+              color: 'var(--text-muted)',
+              fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+              margin: 0,
+            }}
+          >
+            Your links, your data. Always free.
           </p>
         </div>
       </footer>
