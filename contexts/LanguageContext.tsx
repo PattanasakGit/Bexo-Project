@@ -5,20 +5,23 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 export type Language = 'en' | 'th' | 'ja';
 
 export interface Translations {
+  badge: string;
   tagline: string;
   aboutLink: string;
   heading: string;
   headingAccent: string;
+  sub: string;
   placeholder: string;
   shorten: string;
   shortening: string;
   ready: string;
   originalLabel: string;
   pills: [string, string, string];
+  pillIcons: ['zap', 'lock', 'bar'];
   recentLinks: string;
   clear: string;
   savedLocally: string;
-  footerText: string;
+  footerTagline: string;
   copy: string;
   copied: string;
   qrCode: string;
@@ -47,34 +50,37 @@ export interface Translations {
 
 const translations: Record<Language, Translations> = {
   en: {
+    badge: 'Free · Instant · No account',
     tagline: 'Free · No signup',
     aboutLink: 'About',
-    heading: 'Shorten your URLs',
-    headingAccent: 'beautifully',
-    placeholder: 'Paste your long URL here...',
+    heading: 'Short links.',
+    headingAccent: 'Big impression.',
+    sub: 'Trim any URL to a clean, shareable link — instant and free.',
+    placeholder: 'Paste a URL — we\'ll make it shorter',
     shorten: 'Shorten',
     shortening: 'Shortening',
-    ready: 'Link ready',
+    ready: 'Ready to share',
     originalLabel: 'Original:',
-    pills: ['Lightning fast', 'Cookie history', 'Click tracking'],
+    pills: ['Lightning fast', 'No signup required', 'Click tracking'],
+    pillIcons: ['zap', 'lock', 'bar'],
     recentLinks: 'Recent Links',
     clear: 'Clear',
-    savedLocally: 'Saved in browser',
-    footerText: 'Free · No account needed',
+    savedLocally: 'Stored locally · never shared',
+    footerTagline: 'Your links. Your data. Always free.',
     copy: 'Copy',
-    copied: 'Copied',
+    copied: 'Copied!',
     qrCode: 'QR Code',
-    qrTitle: 'Scan QR Code',
+    qrTitle: 'Scan to open',
     share: 'Share',
     shareTitle: 'Share this link',
     close: 'Close',
-    download: 'Download',
+    download: 'Download PNG',
     errorEmpty: 'Please enter a URL to shorten.',
-    errorNetwork: 'Network error. Please check your connection.',
+    errorNetwork: 'Network error — please check your connection.',
     errorGeneric: 'Something went wrong. Please try again.',
     about: {
       title: 'About Bexo',
-      subtitle: 'A free, fast, and private URL shortener.',
+      subtitle: 'Fast, private URL shortening — no account, no tracking, no friction.',
       whatTitle: 'What is Bexo?',
       whatDesc:
         'Bexo is a free URL shortening service that converts long, complex URLs into short, clean links. No registration or personal data required.',
@@ -82,70 +88,73 @@ const translations: Record<Language, Translations> = {
       howSteps: [
         'Paste any long URL into the input field.',
         'Click the Shorten button.',
-        'Your short link is instantly ready to copy, share, or scan via QR code.',
+        'Your short link is instantly ready — copy it, scan the QR code, or share directly.',
       ],
       featuresTitle: 'Features',
       features: [
-        { name: 'Lightning fast', desc: 'Short links are generated instantly.' },
-        { name: 'No account needed', desc: 'Use Bexo without registration or sign-in.' },
-        { name: 'QR Code', desc: 'Generate a QR code for any shortened link.' },
-        { name: 'Share', desc: 'Share your link directly from the app.' },
-        { name: 'Browser history', desc: 'Recent links are stored locally in your browser.' },
-        { name: 'Click tracking', desc: 'Each link records how many times it has been clicked.' },
+        { name: 'Instant', desc: 'Short links are generated in under a second.' },
+        { name: 'No account needed', desc: 'Use Bexo without any registration or sign-in.' },
+        { name: 'QR Code', desc: 'Generate a scannable QR code for any shortened link.' },
+        { name: 'Share', desc: 'Share your link directly via native share or social platforms.' },
+        { name: 'Browser history', desc: 'Recent links are saved locally in your browser — private by design.' },
+        { name: 'Click tracking', desc: 'Each link records how many times it has been opened.' },
       ],
       privacyTitle: 'Privacy',
       privacyDesc:
-        'Your link history is stored locally in your browser via cookies and is never sent to our servers. We do not collect any personal data.',
+        'Your link history is stored locally in your browser via cookies and is never transmitted to our servers. We collect no personal data whatsoever.',
       backHome: 'Back to Bexo',
     },
   },
 
   th: {
+    badge: 'ฟรี · ทันที · ไม่ต้องมีบัญชี',
     tagline: 'ฟรี · ไม่ต้องสมัคร',
     aboutLink: 'เกี่ยวกับ',
-    heading: 'ย่อ URL ของคุณ',
-    headingAccent: 'อย่างสวยงาม',
-    placeholder: 'วาง URL ยาวของคุณที่นี่...',
+    heading: 'ลิงก์สั้น',
+    headingAccent: 'ส่งต่อได้ทุกที่',
+    sub: 'ย่อ URL ยาวให้กระทัดรัด แชร์ได้ทุกแพลตฟอร์ม ฟรี ไม่ต้องสมัคร',
+    placeholder: 'วาง URL — เราจะทำให้สั้นลง',
     shorten: 'ย่อ URL',
     shortening: 'กำลังย่อ',
-    ready: 'ลิงก์พร้อมแล้ว',
+    ready: 'พร้อมแชร์แล้ว',
     originalLabel: 'ต้นฉบับ:',
-    pills: ['รวดเร็ว', 'ประวัติ Cookie', 'ติดตามคลิก'],
+    pills: ['รวดเร็ว', 'ไม่ต้องสมัคร', 'ติดตามคลิก'],
+    pillIcons: ['zap', 'lock', 'bar'],
     recentLinks: 'ลิงก์ล่าสุด',
-    clear: 'ล้าง',
-    savedLocally: 'บันทึกในเบราว์เซอร์',
-    footerText: 'ฟรี · ไม่ต้องมีบัญชี',
+    clear: 'ล้างประวัติ',
+    savedLocally: 'บันทึกในเบราว์เซอร์ · ไม่ส่งต่อ',
+    footerTagline: 'ลิงก์ของคุณ ข้อมูลของคุณ ฟรีเสมอ',
     copy: 'คัดลอก',
     copied: 'คัดลอกแล้ว',
     qrCode: 'QR Code',
-    qrTitle: 'สแกน QR Code',
+    qrTitle: 'สแกนเพื่อเปิด',
     share: 'แชร์',
     shareTitle: 'แชร์ลิงก์นี้',
     close: 'ปิด',
-    download: 'ดาวน์โหลด',
+    download: 'ดาวน์โหลด PNG',
     errorEmpty: 'กรุณากรอก URL ที่ต้องการย่อ',
     errorNetwork: 'เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่',
     errorGeneric: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
     about: {
       title: 'เกี่ยวกับ Bexo',
-      subtitle: 'บริการย่อ URL ฟรี รวดเร็ว และปลอดภัย',
+      subtitle: 'ย่อ URL รวดเร็ว ปลอดภัย ไม่ต้องสมัคร ไม่ต้องเปิดเผยข้อมูล',
       whatTitle: 'Bexo คืออะไร?',
       whatDesc:
-        'Bexo คือบริการย่อ URL ฟรีที่แปลง URL ยาวซับซ้อนให้กลายเป็นลิงก์สั้นกระทัดรัด ไม่ต้องลงทะเบียนหรือให้ข้อมูลส่วนตัว',
+        'Bexo คือบริการย่อ URL ฟรีที่แปลง URL ยาวซับซ้อนให้กลายเป็นลิงก์สั้นกระทัดรัด ไม่ต้องลงทะเบียนหรือให้ข้อมูลส่วนตัวใด ๆ',
       howTitle: 'วิธีการใช้งาน',
       howSteps: [
         'วาง URL ยาวในช่องกรอกข้อมูล',
         'คลิกปุ่มย่อ URL',
-        'ลิงก์สั้นพร้อมให้คัดลอก แชร์ หรือสแกน QR Code ได้ทันที',
+        'ลิงก์สั้นพร้อมให้คัดลอก สแกน QR Code หรือแชร์ได้ทันที',
       ],
       featuresTitle: 'ฟีเจอร์',
       features: [
-        { name: 'รวดเร็ว', desc: 'สร้างลิงก์สั้นได้ทันที' },
-        { name: 'ไม่ต้องสมัครบัญชี', desc: 'ใช้งาน Bexo ได้โดยไม่ต้องลงทะเบียน' },
-        { name: 'QR Code', desc: 'สร้าง QR Code สำหรับลิงก์สั้นของคุณ' },
-        { name: 'แชร์', desc: 'แชร์ลิงก์โดยตรงจากแอป' },
-        { name: 'ประวัติในเบราว์เซอร์', desc: 'ลิงก์ล่าสุดถูกบันทึกในเบราว์เซอร์ของคุณ' },
-        { name: 'ติดตามคลิก', desc: 'แต่ละลิงก์มีการนับจำนวนครั้งที่ถูกคลิก' },
+        { name: 'รวดเร็ว', desc: 'สร้างลิงก์สั้นได้ภายในเสี้ยววินาที' },
+        { name: 'ไม่ต้องสมัครบัญชี', desc: 'ใช้งาน Bexo ได้เลยโดยไม่ต้องลงทะเบียน' },
+        { name: 'QR Code', desc: 'สร้าง QR Code สำหรับสแกนลิงก์สั้นของคุณ' },
+        { name: 'แชร์', desc: 'แชร์ลิงก์โดยตรงผ่านแอปหรือโซเชียลมีเดีย' },
+        { name: 'ประวัติในเบราว์เซอร์', desc: 'ลิงก์ล่าสุดถูกบันทึกในเบราว์เซอร์ของคุณ ปลอดภัยโดยดีไซน์' },
+        { name: 'ติดตามคลิก', desc: 'แต่ละลิงก์บันทึกจำนวนครั้งที่ถูกเปิด' },
       ],
       privacyTitle: 'ความเป็นส่วนตัว',
       privacyDesc:
@@ -155,51 +164,54 @@ const translations: Record<Language, Translations> = {
   },
 
   ja: {
+    badge: '無料 · 即時 · アカウント不要',
     tagline: '無料 · 登録不要',
     aboutLink: 'サービス概要',
-    heading: 'URLを短縮',
-    headingAccent: 'シンプルに',
-    placeholder: 'URLをここに貼り付け...',
+    heading: '短く、',
+    headingAccent: '鋭く、届ける。',
+    sub: 'どんなURLも、シンプルな短縮リンクに。登録不要、即座に。',
+    placeholder: 'URLをここに貼り付け',
     shorten: '短縮する',
     shortening: '処理中',
-    ready: 'リンク完成',
+    ready: '共有できます',
     originalLabel: '元のURL:',
-    pills: ['高速', 'Cookie履歴', 'クリック追跡'],
+    pills: ['高速', '登録不要', 'クリック追跡'],
+    pillIcons: ['zap', 'lock', 'bar'],
     recentLinks: '最近のリンク',
-    clear: '削除',
-    savedLocally: 'ブラウザに保存',
-    footerText: '無料 · アカウント不要',
+    clear: '履歴を削除',
+    savedLocally: 'ブラウザに保存 · 外部送信なし',
+    footerTagline: 'あなたのリンク。あなたのデータ。ずっと無料。',
     copy: 'コピー',
     copied: 'コピー済み',
     qrCode: 'QRコード',
-    qrTitle: 'QRコードをスキャン',
+    qrTitle: 'スキャンして開く',
     share: '共有',
     shareTitle: 'リンクを共有',
     close: '閉じる',
-    download: '保存',
+    download: 'PNG保存',
     errorEmpty: 'URLを入力してください',
     errorNetwork: 'ネットワークエラーが発生しました。再試行してください。',
     errorGeneric: 'エラーが発生しました。再試行してください。',
     about: {
       title: 'Bexoについて',
-      subtitle: '無料・高速・プライベートなURL短縮サービス',
+      subtitle: '高速・プライベート・登録不要のURL短縮サービス',
       whatTitle: 'Bexoとは？',
       whatDesc:
-        'Bexoは、長くて複雑なURLをシンプルな短縮リンクに変換する無料のURL短縮サービスです。登録や個人情報の入力は一切不要です。',
+        'Bexoは、長くて複雑なURLをシンプルな短縮リンクに変換する無料サービスです。登録や個人情報の入力は一切不要です。',
       howTitle: '使い方',
       howSteps: [
         '入力欄に長いURLを貼り付けます。',
         '「短縮する」ボタンをクリックします。',
-        '短縮リンクが即座に生成され、コピー・共有・QRコードスキャンが可能です。',
+        '短縮リンクが即座に生成され、コピー・QRスキャン・直接共有が可能です。',
       ],
       featuresTitle: '機能',
       features: [
-        { name: '高速', desc: '短縮リンクを即座に生成します。' },
+        { name: '即座に生成', desc: '1秒以内に短縮リンクを生成します。' },
         { name: 'アカウント不要', desc: '登録なしでBexoをご利用いただけます。' },
-        { name: 'QRコード', desc: '短縮リンクのQRコードを生成できます。' },
-        { name: '共有', desc: 'アプリから直接リンクを共有できます。' },
+        { name: 'QRコード', desc: '短縮リンクのスキャン用QRコードを生成できます。' },
+        { name: '共有', desc: 'ネイティブ共有またはSNSから直接リンクを共有できます。' },
         { name: 'ブラウザ履歴', desc: '最近のリンクはブラウザにローカル保存されます。' },
-        { name: 'クリック追跡', desc: '各リンクのクリック数を記録します。' },
+        { name: 'クリック追跡', desc: '各リンクの開封回数を記録します。' },
       ],
       privacyTitle: 'プライバシー',
       privacyDesc:
