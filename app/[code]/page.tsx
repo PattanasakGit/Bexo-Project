@@ -50,8 +50,8 @@ export default async function RedirectPage({ params, searchParams }: Props) {
       notFound();
     }
 
-    // 1. Malicious → block
-    if (data.scan_status === 'malicious') {
+    // 1. Dangerous / malicious → block
+    if (data.scan_status === 'danger' || data.scan_status === 'malicious') {
       return <DangerPage code={code} />;
     }
 

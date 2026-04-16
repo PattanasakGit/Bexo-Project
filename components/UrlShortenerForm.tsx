@@ -80,6 +80,7 @@ function ScanStatusBadge({ status }: { status: string }) {
       </span>
     );
   }
+  // unscanned, warning, unknown, pending → neutral badge
   return (
     <span
       style={{

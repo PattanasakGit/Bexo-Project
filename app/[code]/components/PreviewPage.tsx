@@ -30,6 +30,7 @@ function ScanBadge({ status }: { status: string }) {
       </span>
     );
   }
+  // unscanned, warning, unknown, pending → neutral badge
   return (
     <span
       style={{
@@ -46,7 +47,7 @@ function ScanBadge({ status }: { status: string }) {
       }}
     >
       <ShieldQuestion size={13} strokeWidth={2.5} />
-      Scan Unknown
+      Not Yet Scanned
     </span>
   );
 }

@@ -1,10 +1,11 @@
-export type ScanStatus = 'safe' | 'malicious' | 'unknown';
+export type ScanStatus = 'safe' | 'danger' | 'unscanned';
 
 /**
  * Scan a URL against the URLhaus database (no API key required).
- * - is_listed === 'yes'  → 'malicious'
+ * Maps to the DB constraint: ('unscanned', 'safe', 'warning', 'danger')
+ * - is_listed === 'yes'  → 'danger'
  * - no_results           → 'safe'
- * - any error / timeout  → 'unknown'  (fail-open)
+ * - any error / timeout  → 'unscanned'  (fail-open)
  */
 export async function scanUrl(url: string): Promise<ScanStatus> {
   try {
@@ -20,14 +21,14 @@ export async function scanUrl(url: string): Promise<ScanStatus> {
 
     clearTimeout(timeout);
 
-    if (!res.ok) return 'unknown';
+    if (!res.ok) return 'unscanned';
 
     const data = (await res.json()) as { query_status?: string };
 
-    if (data.query_status === 'is_listed') return 'malicious';
+    if (data.query_status === 'is_listed') return 'danger';
     if (data.query_status === 'no_results') return 'safe';
-    return 'unknown';
+    return 'unscanned';
   } catch {
-    return 'unknown';
+    return 'unscanned';
   }
 }
