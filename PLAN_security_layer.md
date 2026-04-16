@@ -14,13 +14,17 @@
 ## Step 1: Database Migration (ทำใน Supabase Dashboard)
 
 ```sql
-ALTER TABLE urls ADD COLUMN password_hash TEXT;
-ALTER TABLE urls ADD COLUMN safe_mode BOOLEAN NOT NULL DEFAULT FALSE;
-ALTER TABLE urls ADD COLUMN scan_status TEXT NOT NULL DEFAULT 'pending';
-ALTER TABLE urls ADD COLUMN scanned_at TIMESTAMPTZ;
+ALTER TABLE urls ADD COLUMN IF NOT EXISTS password_hash TEXT;
+ALTER TABLE urls ADD COLUMN IF NOT EXISTS safe_mode BOOLEAN NOT NULL DEFAULT FALSE;
+ALTER TABLE urls ADD COLUMN IF NOT EXISTS scan_status TEXT NOT NULL DEFAULT 'unscanned';
+ALTER TABLE urls ADD COLUMN IF NOT EXISTS scanned_at TIMESTAMPTZ;
 ```
 
-- [ ] รัน SQL ใน Supabase
+> **หมายเหตุ:** DB มี CHECK constraint `urls_scan_status_check` อยู่แล้ว
+> ค่าที่อนุญาต: `('unscanned', 'safe', 'warning', 'danger')`
+> Code ใช้: `'unscanned'` (timeout/error), `'safe'` (ปลอดภัย), `'danger'` (อันตราย)
+
+- [x] รัน SQL ใน Supabase — สำเร็จแล้ว
 
 ---
 
@@ -30,18 +34,18 @@ ALTER TABLE urls ADD COLUMN scanned_at TIMESTAMPTZ;
 
 **`types/index.ts`** — อัปเดต `UrlRecord` + `ShortenResponse`
 
-- [ ] `types/database.types.ts`
-- [ ] `types/index.ts`
+- [x] `types/database.types.ts`
+- [x] `types/index.ts`
 
 ---
 
 ## Step 3: สร้าง `lib/scan.ts`
 
 - URLhaus endpoint: `POST https://urlhaus-api.abuse.ch/v1/url/`
-- `is_listed` → `'malicious'` | `no_results` → `'safe'` | error/timeout → `'unknown'` (fail open)
+- `is_listed` → `'danger'` | `no_results` → `'safe'` | error/timeout → `'unscanned'` (fail open)
 - Timeout: 4 วินาที
 
-- [ ] สร้างไฟล์ `lib/scan.ts`
+- [x] สร้างไฟล์ `lib/scan.ts`
 
 ---
 
@@ -51,11 +55,11 @@ ALTER TABLE urls ADD COLUMN scanned_at TIMESTAMPTZ;
 
 Logic ใหม่ (ระหว่าง duplicate check กับ insert):
 1. Hash password ด้วย `crypto.createHash('sha256')` ถ้ามี
-2. เรียก `scanUrl()` — ถ้า `malicious` return 400
+2. เรียก `scanUrl()` — ถ้า `danger` return 400
 3. Insert ข้อมูลใหม่พร้อม `password_hash`, `safe_mode`, `scan_status`, `scanned_at`
 4. Return `safe_mode` และ `scan_status` ใน response
 
-- [ ] `app/api/shorten/route.ts`
+- [x] `app/api/shorten/route.ts`
 
 ---
 
@@ -63,7 +67,7 @@ Logic ใหม่ (ระหว่าง duplicate check กับ insert):
 
 POST `{ code, password }` → verify SHA-256 hash → increment click_count → return `{ success: true, url }`
 
-- [ ] สร้างไฟล์ `app/api/verify/route.ts`
+- [x] สร้างไฟล์ `app/api/verify/route.ts`
 
 ---
 
@@ -80,9 +84,9 @@ POST `{ code, password }` → verify SHA-256 hash → increment click_count → 
 - ช่อง input รหัสผ่าน
 - POST `/api/verify` → ถ้า success → `window.location.href = url`
 
-- [ ] `app/[code]/components/DangerPage.tsx`
-- [ ] `app/[code]/components/PreviewPage.tsx`
-- [ ] `app/[code]/components/PasswordGate.tsx`
+- [x] `app/[code]/components/DangerPage.tsx`
+- [x] `app/[code]/components/PreviewPage.tsx`
+- [x] `app/[code]/components/PasswordGate.tsx`
 
 ---
 
@@ -90,15 +94,15 @@ POST `{ code, password }` → verify SHA-256 hash → increment click_count → 
 
 Routing logic (ตามลำดับ):
 ```
-if scan_status === 'malicious'  → render <DangerPage />
-if password_hash !== null       → render <PasswordGate code={code} />
-if safe_mode || ?preview=1      → render <PreviewPage url={...} />
-else                            → increment click_count + redirect()
+if scan_status === 'danger'   → render <DangerPage />
+if password_hash !== null     → render <PasswordGate code={code} />
+if safe_mode || ?preview=1   → render <PreviewPage url={...} />
+else                          → increment click_count + redirect()
 ```
 
 รับ `searchParams` เพิ่มเติมสำหรับ `?preview=1`
 
-- [ ] `app/[code]/page.tsx`
+- [x] `app/[code]/page.tsx`
 
 ---
 
@@ -110,27 +114,27 @@ else                            → increment click_count + redirect()
 
 แสดง scan status badge ใน result card
 
-- [ ] `components/UrlShortenerForm.tsx`
+- [x] `components/UrlShortenerForm.tsx`
 
 ---
 
 ## Step 9: อัปเดต `contexts/LanguageContext.tsx`
 
-เพิ่ม translation keys ใหม่ ~15 keys ทั้ง EN/TH/JA:
+เพิ่ม translation keys ใหม่ ~19 keys ทั้ง EN/TH/JA:
 `safeMode`, `safeModeDesc`, `setPassword`, `passwordPlaceholder`, `advancedOptions`,
 `scanSafe`, `scanUnknown`, `errorMalicious`,
 `previewTitle`, `previewProceed`, `previewCancel`,
 `dangerTitle`, `dangerDesc`, `dangerBack`,
 `passwordGateTitle`, `passwordGatePlaceholder`, `passwordGateSubmit`, `passwordGateError`, `passwordGateVerifying`
 
-- [ ] `contexts/LanguageContext.tsx`
+- [x] `contexts/LanguageContext.tsx`
 
 ---
 
 ## Step 10: Commit & Push
 
-- [ ] Commit ทุก step พร้อม message ที่ชัดเจน
-- [ ] Push branch `claude/add-claude-md-config-2JjDp`
+- [x] Commit ทุก step พร้อม message ที่ชัดเจน
+- [x] Push branch `claude/complete-security-layer-6pxeL`
 
 ---
 
@@ -142,6 +146,6 @@ else                            → increment click_count + redirect()
 - [ ] รหัสผ่านถูก → redirect ไปปลายทาง
 - [ ] Safe Mode per-link ทำงาน
 - [ ] `?preview=1` ทำงานกับทุกลิงก์
-- [ ] URLhaus timeout → สร้างลิงก์ได้ (scan_status: 'unknown')
+- [ ] URLhaus timeout → สร้างลิงก์ได้ (scan_status: 'unscanned')
 - [ ] `npm run lint` ผ่าน
 - [ ] `npm run build` ผ่าน
