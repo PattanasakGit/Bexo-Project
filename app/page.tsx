@@ -6,6 +6,7 @@ import { Link2, Zap, ShieldOff, BarChart2 } from 'lucide-react';
 import UrlShortenerForm from '@/components/UrlShortenerForm';
 import HistoryList from '@/components/HistoryList';
 import { useLanguage, Language } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 const LANG_OPTIONS: { code: Language; label: string }[] = [
   { code: 'en', label: 'EN' },
@@ -18,6 +19,7 @@ const PILL_ICONS = [Zap, ShieldOff, BarChart2];
 export default function Home() {
   const [historyTrigger, setHistoryTrigger] = useState(0);
   const { lang, setLang, t } = useLanguage();
+  const { user, isLoading: authLoading } = useAuth();
 
   return (
     <div
@@ -104,6 +106,75 @@ export default function Home() {
             >
               {t.aboutLink}
             </Link>
+
+            {/* Auth nav */}
+            {!authLoading && (
+              user ? (
+                <Link
+                  href="/dashboard"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '7px',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    textDecoration: 'none',
+                    padding: '5px 12px 5px 6px',
+                    borderRadius: '9px',
+                    background: 'var(--bg-subtle)',
+                    border: '1px solid var(--border)',
+                    transition: 'all 0.15s',
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = 'var(--accent)';
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.borderColor = 'var(--border)';
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '24px',
+                      height: '24px',
+                      borderRadius: '7px',
+                      background: 'var(--accent)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <span style={{ fontSize: '10px', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
+                      {(user.email ?? 'U').slice(0, 2).toUpperCase()}
+                    </span>
+                  </div>
+                  {t.auth.dashboardLink}
+                </Link>
+              ) : (
+                <Link
+                  href="/auth/login"
+                  style={{
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    color: '#fff',
+                    textDecoration: 'none',
+                    padding: '6px 14px',
+                    borderRadius: '9px',
+                    background: 'var(--accent)',
+                    transition: 'background 0.15s',
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = 'var(--accent-hover)';
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLAnchorElement).style.background = 'var(--accent)';
+                  }}
+                >
+                  {t.auth.loginLink}
+                </Link>
+              )
+            )}
 
             {/* Divider */}
             <div style={{ width: '1px', height: '16px', background: 'var(--border)', margin: '0 4px' }} />
