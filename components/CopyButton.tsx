@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Copy, Check } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface CopyButtonProps {
   text: string;
@@ -9,6 +10,7 @@ interface CopyButtonProps {
 }
 
 export default function CopyButton({ text, size = 'md' }: CopyButtonProps) {
+  const { t } = useLanguage();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -33,12 +35,12 @@ export default function CopyButton({ text, size = 'md' }: CopyButtonProps) {
   return (
     <button
       onClick={handleCopy}
-      aria-label={copied ? 'Copied!' : 'Copy to clipboard'}
+      aria-label={copied ? t.copied : t.copy}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
         gap: '6px',
-        fontFamily: 'var(--font-nunito), Nunito, sans-serif',
+        fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
         fontWeight: 600,
         fontSize: isSmall ? '12px' : '13px',
         padding: isSmall ? '5px 10px' : '7px 14px',
@@ -50,14 +52,14 @@ export default function CopyButton({ text, size = 'md' }: CopyButtonProps) {
         transition: 'all 0.2s ease',
         whiteSpace: 'nowrap',
       }}
-      onMouseEnter={e => {
+      onMouseEnter={(e) => {
         if (!copied) {
           (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--accent)';
           (e.currentTarget as HTMLButtonElement).style.color = 'var(--accent)';
           (e.currentTarget as HTMLButtonElement).style.background = 'var(--accent-light)';
         }
       }}
-      onMouseLeave={e => {
+      onMouseLeave={(e) => {
         if (!copied) {
           (e.currentTarget as HTMLButtonElement).style.borderColor = 'var(--border)';
           (e.currentTarget as HTMLButtonElement).style.color = 'var(--text-secondary)';
@@ -70,7 +72,7 @@ export default function CopyButton({ text, size = 'md' }: CopyButtonProps) {
       ) : (
         <Copy size={isSmall ? 12 : 14} strokeWidth={2} />
       )}
-      {copied ? 'Copied' : 'Copy'}
+      {copied ? t.copied : t.copy}
     </button>
   );
 }

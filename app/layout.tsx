@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
 import './globals.css';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 
 const nunito = Nunito({
-  subsets: ['latin'],
+  subsets: ['latin', 'latin-ext'],
   display: 'swap',
   variable: '--font-nunito',
   weight: ['400', '500', '600', '700', '800'],
@@ -18,14 +19,14 @@ export const metadata: Metadata = {
     template: '%s | Bexo',
   },
   description:
-    'Shorten long URLs instantly with Bexo. No signup required. Free, fast, and simple URL shortener. Track your links and share them anywhere.',
+    'Shorten long URLs instantly with Bexo. No signup required. Free, fast, and simple URL shortener with QR code generation and sharing.',
   keywords: [
     'url shortener',
     'link shortener',
     'free url shortener',
     'short link',
     'shorten url',
-    'link management',
+    'qr code',
     'bexo',
   ],
   authors: [{ name: 'Bexo' }],
@@ -72,7 +73,13 @@ const jsonLd = {
   operatingSystem: 'Any',
   browserRequirements: 'Requires JavaScript',
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-  featureList: ['URL shortening', 'No registration required', 'Link history via browser cookies'],
+  featureList: [
+    'URL shortening',
+    'QR code generation',
+    'Link sharing',
+    'No registration required',
+    'Link history via browser cookies',
+  ],
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -84,7 +91,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-full antialiased">{children}</body>
+      <body className="min-h-full antialiased">
+        <LanguageProvider>{children}</LanguageProvider>
+      </body>
     </html>
   );
 }
