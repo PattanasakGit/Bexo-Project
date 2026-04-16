@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error('Supabase insert error:', error);
       return NextResponse.json(
-        { error: `DB error: ${error.message} (code: ${error.code})` },
+        { error: 'Failed to create short URL. Please try again.' },
         { status: 500 }
       );
     }
