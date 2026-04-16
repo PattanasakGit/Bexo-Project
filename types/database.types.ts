@@ -12,6 +12,7 @@ export type Database = {
           safe_mode: boolean;
           scan_status: string;
           scanned_at: string | null;
+          user_id: string | null;
         };
         Insert: {
           id?: string;
@@ -23,6 +24,7 @@ export type Database = {
           safe_mode?: boolean;
           scan_status?: string;
           scanned_at?: string | null;
+          user_id?: string | null;
         };
         Update: {
           id?: string;
@@ -34,8 +36,34 @@ export type Database = {
           safe_mode?: boolean;
           scan_status?: string;
           scanned_at?: string | null;
+          user_id?: string | null;
         };
         Relationships: [];
+      };
+      profiles: {
+        Row: {
+          id: string;
+          display_name: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id: string;
+          display_name?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          display_name?: string | null;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'profiles_id_fkey';
+            columns: ['id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
       };
     };
     Views: Record<string, never>;

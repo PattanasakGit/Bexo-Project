@@ -66,6 +66,87 @@ export interface Translations {
     privacyDesc: string;
     backHome: string;
   };
+  // Authentication
+  auth: {
+    // Nav
+    loginLink: string;
+    registerLink: string;
+    dashboardLink: string;
+    logoutBtn: string;
+    // Login page
+    loginTitle: string;
+    loginSubtitle: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    passwordLabel: string;
+    rememberMe: string;
+    forgotPassword: string;
+    loginBtn: string;
+    signingIn: string;
+    noAccount: string;
+    signUpLink: string;
+    // Register page
+    registerTitle: string;
+    registerSubtitle: string;
+    confirmPasswordLabel: string;
+    confirmPasswordPlaceholder: string;
+    registerBtn: string;
+    registering: string;
+    hasAccount: string;
+    signInLink: string;
+    // Password strength
+    passwordStrength: string;
+    pwRequireLength: string;
+    pwRequireUppercase: string;
+    pwRequireLowercase: string;
+    pwRequireNumber: string;
+    passwordsNoMatch: string;
+    passwordStrengthWeak: string;
+    passwordStrengthFair: string;
+    passwordStrengthGood: string;
+    passwordStrengthStrong: string;
+    // Forgot password
+    forgotTitle: string;
+    forgotSubtitle: string;
+    sendResetLink: string;
+    sendingReset: string;
+    resetEmailSent: string;
+    resetEmailDesc: string;
+    backToLogin: string;
+    // Reset password
+    resetTitle: string;
+    resetSubtitle: string;
+    newPasswordLabel: string;
+    resetBtn: string;
+    resetting: string;
+    // Verify email
+    verifyTitle: string;
+    verifyDesc: string;
+    resendEmail: string;
+    // Dashboard
+    dashboardTitle: string;
+    dashboardSubtitle: string;
+    profileSection: string;
+    displayNameLabel: string;
+    displayNamePlaceholder: string;
+    saveProfile: string;
+    savingProfile: string;
+    profileSaved: string;
+    myLinksSection: string;
+    noLinksYet: string;
+    noLinksDesc: string;
+    deleteLink: string;
+    // Auth errors
+    errorInvalidEmail: string;
+    errorInvalidCredentials: string;
+    errorEmailTaken: string;
+    errorRateLimited: string;
+    errorWeakPassword: string;
+    errorSessionExpired: string;
+    errorExpiredLink: string;
+    errorGenericAuth: string;
+    errorEmailNotConfirmed: string;
+  };
 }
 
 const translations: Record<Language, Translations> = {
@@ -143,6 +224,77 @@ const translations: Record<Language, Translations> = {
         'Your link history is stored locally in your browser via cookies and is never transmitted to our servers. We collect no personal data whatsoever.',
       backHome: 'Back to Bexo',
     },
+    auth: {
+      loginLink: 'Login',
+      registerLink: 'Sign up',
+      dashboardLink: 'Dashboard',
+      logoutBtn: 'Log out',
+      loginTitle: 'Welcome back',
+      loginSubtitle: 'Sign in to your Bexo account',
+      emailLabel: 'Email',
+      emailPlaceholder: 'you@example.com',
+      passwordLabel: 'Password',
+      rememberMe: 'Remember me',
+      forgotPassword: 'Forgot password?',
+      loginBtn: 'Sign in',
+      signingIn: 'Signing in…',
+      noAccount: "Don't have an account?",
+      signUpLink: 'Sign up',
+      registerTitle: 'Create an account',
+      registerSubtitle: 'Join Bexo — free forever',
+      confirmPasswordLabel: 'Confirm password',
+      confirmPasswordPlaceholder: 'Re-enter your password',
+      registerBtn: 'Create account',
+      registering: 'Creating account…',
+      hasAccount: 'Already have an account?',
+      signInLink: 'Sign in',
+      passwordStrength: 'Password strength',
+      pwRequireLength: 'At least 8 characters',
+      pwRequireUppercase: 'One uppercase letter',
+      pwRequireLowercase: 'One lowercase letter',
+      pwRequireNumber: 'One number',
+      passwordsNoMatch: 'Passwords do not match',
+      passwordStrengthWeak: 'Weak',
+      passwordStrengthFair: 'Fair',
+      passwordStrengthGood: 'Good',
+      passwordStrengthStrong: 'Strong',
+      forgotTitle: 'Reset your password',
+      forgotSubtitle: "Enter your email and we'll send you a reset link",
+      sendResetLink: 'Send reset link',
+      sendingReset: 'Sending…',
+      resetEmailSent: 'Check your inbox!',
+      resetEmailDesc: 'We sent a password reset link to your email',
+      backToLogin: 'Back to login',
+      resetTitle: 'Set new password',
+      resetSubtitle: 'Enter your new password below',
+      newPasswordLabel: 'New password',
+      resetBtn: 'Update password',
+      resetting: 'Updating…',
+      verifyTitle: 'Verify your email',
+      verifyDesc: "We sent a confirmation link to your email. Click the link to activate your account.",
+      resendEmail: 'Resend email',
+      dashboardTitle: 'Dashboard',
+      dashboardSubtitle: 'Manage your links and profile',
+      profileSection: 'Your Profile',
+      displayNameLabel: 'Display name',
+      displayNamePlaceholder: 'Your name',
+      saveProfile: 'Save',
+      savingProfile: 'Saving…',
+      profileSaved: 'Saved!',
+      myLinksSection: 'My Links',
+      noLinksYet: 'No links yet',
+      noLinksDesc: 'Shortened links you create while logged in will appear here.',
+      deleteLink: 'Delete',
+      errorInvalidEmail: 'Please enter a valid email address',
+      errorInvalidCredentials: 'Incorrect email or password',
+      errorEmailTaken: 'This email is already registered',
+      errorRateLimited: 'Too many attempts. Please wait a moment and try again',
+      errorWeakPassword: 'Password does not meet requirements',
+      errorSessionExpired: 'Your session has expired. Please log in again',
+      errorExpiredLink: 'This link has expired. Please request a new one',
+      errorGenericAuth: 'Something went wrong. Please try again',
+      errorEmailNotConfirmed: 'Please verify your email before logging in',
+    },
   },
 
   th: {
@@ -219,6 +371,77 @@ const translations: Record<Language, Translations> = {
         'ประวัติลิงก์ถูกเก็บไว้ในเบราว์เซอร์ของคุณผ่าน Cookie และไม่ถูกส่งไปยังเซิร์ฟเวอร์ของเรา เราไม่เก็บรวบรวมข้อมูลส่วนบุคคลใด ๆ',
       backHome: 'กลับหน้าหลัก',
     },
+    auth: {
+      loginLink: 'เข้าสู่ระบบ',
+      registerLink: 'สมัครสมาชิก',
+      dashboardLink: 'แดชบอร์ด',
+      logoutBtn: 'ออกจากระบบ',
+      loginTitle: 'ยินดีต้อนรับกลับ',
+      loginSubtitle: 'เข้าสู่ระบบบัญชี Bexo ของคุณ',
+      emailLabel: 'อีเมล',
+      emailPlaceholder: 'you@example.com',
+      passwordLabel: 'รหัสผ่าน',
+      rememberMe: 'จดจำฉัน',
+      forgotPassword: 'ลืมรหัสผ่าน?',
+      loginBtn: 'เข้าสู่ระบบ',
+      signingIn: 'กำลังเข้าสู่ระบบ…',
+      noAccount: 'ยังไม่มีบัญชี?',
+      signUpLink: 'สมัครสมาชิก',
+      registerTitle: 'สร้างบัญชีใหม่',
+      registerSubtitle: 'เข้าร่วม Bexo — ฟรีตลอดไป',
+      confirmPasswordLabel: 'ยืนยันรหัสผ่าน',
+      confirmPasswordPlaceholder: 'กรอกรหัสผ่านอีกครั้ง',
+      registerBtn: 'สร้างบัญชี',
+      registering: 'กำลังสร้างบัญชี…',
+      hasAccount: 'มีบัญชีอยู่แล้ว?',
+      signInLink: 'เข้าสู่ระบบ',
+      passwordStrength: 'ความแข็งแกร่งของรหัสผ่าน',
+      pwRequireLength: 'อย่างน้อย 8 ตัวอักษร',
+      pwRequireUppercase: 'ตัวพิมพ์ใหญ่อย่างน้อย 1 ตัว',
+      pwRequireLowercase: 'ตัวพิมพ์เล็กอย่างน้อย 1 ตัว',
+      pwRequireNumber: 'ตัวเลขอย่างน้อย 1 ตัว',
+      passwordsNoMatch: 'รหัสผ่านไม่ตรงกัน',
+      passwordStrengthWeak: 'อ่อนแอ',
+      passwordStrengthFair: 'พอใช้',
+      passwordStrengthGood: 'ดี',
+      passwordStrengthStrong: 'แข็งแกร่ง',
+      forgotTitle: 'รีเซ็ตรหัสผ่าน',
+      forgotSubtitle: 'กรอกอีเมลของคุณ เราจะส่งลิงก์รีเซ็ตให้',
+      sendResetLink: 'ส่งลิงก์รีเซ็ต',
+      sendingReset: 'กำลังส่ง…',
+      resetEmailSent: 'ตรวจสอบกล่องจดหมาย!',
+      resetEmailDesc: 'เราส่งลิงก์รีเซ็ตรหัสผ่านไปยังอีเมลของคุณแล้ว',
+      backToLogin: 'กลับสู่หน้าเข้าสู่ระบบ',
+      resetTitle: 'ตั้งรหัสผ่านใหม่',
+      resetSubtitle: 'กรอกรหัสผ่านใหม่ของคุณด้านล่าง',
+      newPasswordLabel: 'รหัสผ่านใหม่',
+      resetBtn: 'อัปเดตรหัสผ่าน',
+      resetting: 'กำลังอัปเดต…',
+      verifyTitle: 'ยืนยันอีเมลของคุณ',
+      verifyDesc: 'เราส่งลิงก์ยืนยันไปยังอีเมลของคุณแล้ว คลิกลิงก์เพื่อเปิดใช้งานบัญชี',
+      resendEmail: 'ส่งอีเมลใหม่',
+      dashboardTitle: 'แดชบอร์ด',
+      dashboardSubtitle: 'จัดการลิงก์และโปรไฟล์ของคุณ',
+      profileSection: 'โปรไฟล์ของคุณ',
+      displayNameLabel: 'ชื่อแสดง',
+      displayNamePlaceholder: 'ชื่อของคุณ',
+      saveProfile: 'บันทึก',
+      savingProfile: 'กำลังบันทึก…',
+      profileSaved: 'บันทึกแล้ว!',
+      myLinksSection: 'ลิงก์ของฉัน',
+      noLinksYet: 'ยังไม่มีลิงก์',
+      noLinksDesc: 'ลิงก์ที่คุณสร้างขณะเข้าสู่ระบบจะปรากฏที่นี่',
+      deleteLink: 'ลบ',
+      errorInvalidEmail: 'กรุณากรอกอีเมลที่ถูกต้อง',
+      errorInvalidCredentials: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
+      errorEmailTaken: 'อีเมลนี้ถูกลงทะเบียนแล้ว',
+      errorRateLimited: 'พยายามเข้าสู่ระบบบ่อยเกินไป กรุณารอสักครู่แล้วลองใหม่',
+      errorWeakPassword: 'รหัสผ่านไม่ตรงตามข้อกำหนด',
+      errorSessionExpired: 'เซสชันของคุณหมดอายุแล้ว กรุณาเข้าสู่ระบบใหม่',
+      errorExpiredLink: 'ลิงก์นี้หมดอายุแล้ว กรุณาขอลิงก์ใหม่',
+      errorGenericAuth: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
+      errorEmailNotConfirmed: 'กรุณายืนยันอีเมลของคุณก่อนเข้าสู่ระบบ',
+    },
   },
 
   ja: {
@@ -294,6 +517,77 @@ const translations: Record<Language, Translations> = {
       privacyDesc:
         '閲覧履歴はCookieを使用してブラウザにローカル保存され、サーバーには送信されません。個人データは一切収集しません。',
       backHome: 'ホームに戻る',
+    },
+    auth: {
+      loginLink: 'ログイン',
+      registerLink: '登録',
+      dashboardLink: 'ダッシュボード',
+      logoutBtn: 'ログアウト',
+      loginTitle: 'おかえりなさい',
+      loginSubtitle: 'Bexoアカウントにログイン',
+      emailLabel: 'メールアドレス',
+      emailPlaceholder: 'you@example.com',
+      passwordLabel: 'パスワード',
+      rememberMe: 'ログイン状態を保持',
+      forgotPassword: 'パスワードを忘れた方',
+      loginBtn: 'ログイン',
+      signingIn: 'ログイン中…',
+      noAccount: 'アカウントをお持ちでない方',
+      signUpLink: '新規登録',
+      registerTitle: 'アカウントを作成',
+      registerSubtitle: 'Bexoに参加 — 永久無料',
+      confirmPasswordLabel: 'パスワード（確認）',
+      confirmPasswordPlaceholder: 'パスワードを再入力',
+      registerBtn: 'アカウントを作成',
+      registering: 'アカウント作成中…',
+      hasAccount: 'すでにアカウントをお持ちの方',
+      signInLink: 'ログイン',
+      passwordStrength: 'パスワード強度',
+      pwRequireLength: '8文字以上',
+      pwRequireUppercase: '大文字を1文字以上',
+      pwRequireLowercase: '小文字を1文字以上',
+      pwRequireNumber: '数字を1文字以上',
+      passwordsNoMatch: 'パスワードが一致しません',
+      passwordStrengthWeak: '弱い',
+      passwordStrengthFair: '普通',
+      passwordStrengthGood: '良い',
+      passwordStrengthStrong: '強い',
+      forgotTitle: 'パスワードのリセット',
+      forgotSubtitle: 'メールアドレスを入力してください。リセットリンクを送信します',
+      sendResetLink: 'リセットリンクを送信',
+      sendingReset: '送信中…',
+      resetEmailSent: 'メールを確認してください！',
+      resetEmailDesc: 'パスワードリセットリンクをメールに送信しました',
+      backToLogin: 'ログインに戻る',
+      resetTitle: '新しいパスワードを設定',
+      resetSubtitle: '以下に新しいパスワードを入力してください',
+      newPasswordLabel: '新しいパスワード',
+      resetBtn: 'パスワードを更新',
+      resetting: '更新中…',
+      verifyTitle: 'メールアドレスの確認',
+      verifyDesc: 'メールアドレスに確認リンクを送信しました。リンクをクリックしてアカウントを有効化してください。',
+      resendEmail: 'メールを再送',
+      dashboardTitle: 'ダッシュボード',
+      dashboardSubtitle: 'リンクとプロフィールを管理',
+      profileSection: 'プロフィール',
+      displayNameLabel: '表示名',
+      displayNamePlaceholder: 'お名前',
+      saveProfile: '保存',
+      savingProfile: '保存中…',
+      profileSaved: '保存しました！',
+      myLinksSection: 'マイリンク',
+      noLinksYet: 'リンクはまだありません',
+      noLinksDesc: 'ログイン中に作成した短縮リンクがここに表示されます。',
+      deleteLink: '削除',
+      errorInvalidEmail: '有効なメールアドレスを入力してください',
+      errorInvalidCredentials: 'メールアドレスまたはパスワードが正しくありません',
+      errorEmailTaken: 'このメールアドレスはすでに登録されています',
+      errorRateLimited: 'ログイン試行回数が多すぎます。しばらく待ってから再試行してください',
+      errorWeakPassword: 'パスワードが要件を満たしていません',
+      errorSessionExpired: 'セッションが期限切れです。再度ログインしてください',
+      errorExpiredLink: 'このリンクは期限切れです。新しいリンクを要求してください',
+      errorGenericAuth: 'エラーが発生しました。再試行してください',
+      errorEmailNotConfirmed: 'ログインする前にメールアドレスを確認してください',
     },
   },
 };
