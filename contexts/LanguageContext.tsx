@@ -33,6 +33,26 @@ export interface Translations {
   errorEmpty: string;
   errorNetwork: string;
   errorGeneric: string;
+  // Security layer
+  advancedOptions: string;
+  safeMode: string;
+  safeModeDesc: string;
+  setPassword: string;
+  passwordPlaceholder: string;
+  scanSafe: string;
+  scanUnknown: string;
+  errorMalicious: string;
+  previewTitle: string;
+  previewProceed: string;
+  previewCancel: string;
+  dangerTitle: string;
+  dangerDesc: string;
+  dangerBack: string;
+  passwordGateTitle: string;
+  passwordGatePlaceholder: string;
+  passwordGateSubmit: string;
+  passwordGateError: string;
+  passwordGateVerifying: string;
   about: {
     title: string;
     subtitle: string;
@@ -78,6 +98,25 @@ const translations: Record<Language, Translations> = {
     errorEmpty: 'Please enter a URL to shorten.',
     errorNetwork: 'Network error — please check your connection.',
     errorGeneric: 'Something went wrong. Please try again.',
+    advancedOptions: 'Advanced Options',
+    safeMode: 'Safe Mode',
+    safeModeDesc: 'Show a preview page before redirecting visitors.',
+    setPassword: 'Password (optional)',
+    passwordPlaceholder: 'Leave blank for no password',
+    scanSafe: 'Scanned — Safe',
+    scanUnknown: 'Scan Unknown',
+    errorMalicious: 'This URL has been flagged as malicious and cannot be shortened.',
+    previewTitle: 'Destination Preview',
+    previewProceed: 'Proceed to Destination',
+    previewCancel: 'Cancel',
+    dangerTitle: 'Dangerous Link Blocked',
+    dangerDesc: 'This link has been flagged as malicious. Visiting it may put your device or personal information at risk.',
+    dangerBack: '← Back to Safety',
+    passwordGateTitle: 'Password Required',
+    passwordGatePlaceholder: 'Enter password',
+    passwordGateSubmit: 'Unlock Link',
+    passwordGateError: 'Incorrect password. Please try again.',
+    passwordGateVerifying: 'Verifying…',
     about: {
       title: 'About Bexo',
       subtitle: 'Fast, private URL shortening — no account, no tracking, no friction.',
@@ -135,6 +174,25 @@ const translations: Record<Language, Translations> = {
     errorEmpty: 'กรุณากรอก URL ที่ต้องการย่อ',
     errorNetwork: 'เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่',
     errorGeneric: 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
+    advancedOptions: 'ตัวเลือกเพิ่มเติม',
+    safeMode: 'Safe Mode',
+    safeModeDesc: 'แสดงหน้าตัวอย่างก่อน redirect ทุกครั้ง',
+    setPassword: 'รหัสผ่าน (ไม่บังคับ)',
+    passwordPlaceholder: 'เว้นว่างหากไม่ต้องการรหัสผ่าน',
+    scanSafe: 'สแกนแล้ว — ปลอดภัย',
+    scanUnknown: 'ไม่ทราบผลสแกน',
+    errorMalicious: 'URL นี้ถูกระบุว่าเป็นอันตราย ไม่สามารถย่อได้',
+    previewTitle: 'ตัวอย่างปลายทาง',
+    previewProceed: 'ไปยังปลายทาง',
+    previewCancel: 'ยกเลิก',
+    dangerTitle: 'ลิงก์อันตราย — ถูกบล็อก',
+    dangerDesc: 'ลิงก์นี้ถูกระบุว่าเป็นอันตราย การเข้าถึงอาจเป็นอันตรายต่ออุปกรณ์หรือข้อมูลส่วนตัวของคุณ',
+    dangerBack: '← กลับสู่ความปลอดภัย',
+    passwordGateTitle: 'ต้องใส่รหัสผ่าน',
+    passwordGatePlaceholder: 'กรอกรหัสผ่าน',
+    passwordGateSubmit: 'ปลดล็อกลิงก์',
+    passwordGateError: 'รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่',
+    passwordGateVerifying: 'กำลังตรวจสอบ…',
     about: {
       title: 'เกี่ยวกับ Bexo',
       subtitle: 'ย่อ URL รวดเร็ว ปลอดภัย ไม่ต้องสมัคร ไม่ต้องเปิดเผยข้อมูล',
@@ -192,6 +250,25 @@ const translations: Record<Language, Translations> = {
     errorEmpty: 'URLを入力してください',
     errorNetwork: 'ネットワークエラーが発生しました。再試行してください。',
     errorGeneric: 'エラーが発生しました。再試行してください。',
+    advancedOptions: '詳細オプション',
+    safeMode: 'セーフモード',
+    safeModeDesc: 'リダイレクト前に宛先プレビューを表示します。',
+    setPassword: 'パスワード（任意）',
+    passwordPlaceholder: 'パスワードなしの場合は空白',
+    scanSafe: 'スキャン済 — 安全',
+    scanUnknown: 'スキャン不明',
+    errorMalicious: 'このURLは危険と判定されたため短縮できません。',
+    previewTitle: '遷移先プレビュー',
+    previewProceed: '遷移先へ進む',
+    previewCancel: 'キャンセル',
+    dangerTitle: '危険なリンクをブロック',
+    dangerDesc: 'このリンクは悪意のあるURLとして検出されました。アクセスするとデバイスや個人情報が危険にさらされる可能性があります。',
+    dangerBack: '← 安全な場所に戻る',
+    passwordGateTitle: 'パスワードが必要です',
+    passwordGatePlaceholder: 'パスワードを入力',
+    passwordGateSubmit: 'リンクを解錠',
+    passwordGateError: 'パスワードが正しくありません。再試行してください。',
+    passwordGateVerifying: '確認中…',
     about: {
       title: 'Bexoについて',
       subtitle: '高速・プライベート・登録不要のURL短縮サービス',

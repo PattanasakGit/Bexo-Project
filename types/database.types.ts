@@ -8,6 +8,10 @@ export type Database = {
           short_code: string;
           created_at: string;
           click_count: number;
+          password_hash: string | null;
+          safe_mode: boolean;
+          scan_status: string;
+          scanned_at: string | null;
         };
         Insert: {
           id?: string;
@@ -15,6 +19,10 @@ export type Database = {
           short_code: string;
           created_at?: string;
           click_count?: number;
+          password_hash?: string | null;
+          safe_mode?: boolean;
+          scan_status?: string;
+          scanned_at?: string | null;
         };
         Update: {
           id?: string;
@@ -22,6 +30,10 @@ export type Database = {
           short_code?: string;
           created_at?: string;
           click_count?: number;
+          password_hash?: string | null;
+          safe_mode?: boolean;
+          scan_status?: string;
+          scanned_at?: string | null;
         };
         Relationships: [];
       };
