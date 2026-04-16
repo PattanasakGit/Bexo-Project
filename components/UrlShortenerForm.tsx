@@ -11,6 +11,12 @@ import {
   X,
   Download,
   Check,
+  ChevronDown,
+  Lock,
+  Eye,
+  EyeOff,
+  ShieldCheck,
+  ShieldQuestion,
 } from 'lucide-react';
 import QRCodeLib from 'qrcode';
 import CopyButton from './CopyButton';
@@ -48,6 +54,51 @@ function getHistory(): HistoryItem[] {
 
 interface UrlShortenerFormProps {
   onHistoryUpdate?: () => void;
+}
+
+/* ─── Scan Status Badge ─────────────────────────────────────────────────── */
+function ScanStatusBadge({ status }: { status: string }) {
+  const { t } = useLanguage();
+  if (status === 'safe') {
+    return (
+      <span
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '5px',
+          padding: '3px 9px',
+          background: '#F0FFF4',
+          border: '1.5px solid #9AE6B4',
+          borderRadius: '999px',
+          fontSize: '11px',
+          fontWeight: 700,
+          color: '#276749',
+        }}
+      >
+        <ShieldCheck size={12} strokeWidth={2.5} />
+        {t.scanSafe}
+      </span>
+    );
+  }
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '5px',
+        padding: '3px 9px',
+        background: '#FFFBEB',
+        border: '1.5px solid #F6E05E',
+        borderRadius: '999px',
+        fontSize: '11px',
+        fontWeight: 700,
+        color: '#744210',
+      }}
+    >
+      <ShieldQuestion size={12} strokeWidth={2.5} />
+      {t.scanUnknown}
+    </span>
+  );
 }
 
 /* ─── QR Modal ─────────────────────────────────────────────────────────── */
@@ -366,6 +417,13 @@ export default function UrlShortenerForm({ onHistoryUpdate }: UrlShortenerFormPr
   const [loading, setLoading] = useState(false);
   const [showQR, setShowQR] = useState(false);
   const [showShare, setShowShare] = useState(false);
+
+  // Advanced options state
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [safeMode, setSafeMode] = useState(false);
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -389,10 +447,14 @@ export default function UrlShortenerForm({ onHistoryUpdate }: UrlShortenerFormPr
 
     setLoading(true);
     try {
+      const body: Record<string, unknown> = { url: urlToSend };
+      if (safeMode) body.safe_mode = true;
+      if (password.trim()) body.password = password.trim();
+
       const response = await fetch('/api/shorten', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: urlToSend }),
+        body: JSON.stringify(body),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -401,6 +463,9 @@ export default function UrlShortenerForm({ onHistoryUpdate }: UrlShortenerFormPr
       }
       setResult(data as ShortenResponse);
       setUrl('');
+      setPassword('');
+      setSafeMode(false);
+      setShowAdvanced(false);
       saveToHistory({
         short_code: data.short_code,
         original_url: data.original_url,
@@ -505,6 +570,193 @@ export default function UrlShortenerForm({ onHistoryUpdate }: UrlShortenerFormPr
               {error}
             </p>
           )}
+
+          {/* ── Advanced Options ── */}
+          <div style={{ marginTop: '10px' }}>
+            <button
+              type="button"
+              onClick={() => setShowAdvanced((v) => !v)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '4px 2px',
+                fontSize: '13px',
+                fontWeight: 600,
+                color: 'var(--text-muted)',
+                fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
+                transition: 'color 0.15s',
+              }}
+              onMouseEnter={(e) =>
+                ((e.currentTarget as HTMLButtonElement).style.color = 'var(--accent)')
+              }
+              onMouseLeave={(e) =>
+                ((e.currentTarget as HTMLButtonElement).style.color = 'var(--text-muted)')
+              }
+            >
+              <ChevronDown
+                size={14}
+                strokeWidth={2.5}
+                style={{
+                  transition: 'transform 0.2s',
+                  transform: showAdvanced ? 'rotate(180deg)' : 'rotate(0deg)',
+                }}
+              />
+              {t.advancedOptions}
+            </button>
+
+            {showAdvanced && (
+              <div
+                className="animate-scale-in"
+                style={{
+                  marginTop: '10px',
+                  background: 'var(--bg-card)',
+                  border: '1.5px solid var(--border)',
+                  borderRadius: '14px',
+                  padding: '16px',
+                }}
+              >
+                {/* Safe Mode */}
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '10px',
+                    cursor: 'pointer',
+                    marginBottom: '14px',
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={safeMode}
+                    onChange={(e) => setSafeMode(e.target.checked)}
+                    style={{
+                      marginTop: '2px',
+                      width: '16px',
+                      height: '16px',
+                      accentColor: 'var(--accent)',
+                      cursor: 'pointer',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <div>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: '13px',
+                        fontWeight: 700,
+                        color: 'var(--text-primary)',
+                        fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
+                      }}
+                    >
+                      {t.safeMode}
+                    </p>
+                    <p
+                      style={{
+                        margin: '2px 0 0',
+                        fontSize: '12px',
+                        color: 'var(--text-muted)',
+                        fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
+                      }}
+                    >
+                      {t.safeModeDesc}
+                    </p>
+                  </div>
+                </label>
+
+                {/* Password */}
+                <div>
+                  <p
+                    style={{
+                      margin: '0 0 6px',
+                      fontSize: '13px',
+                      fontWeight: 700,
+                      color: 'var(--text-primary)',
+                      fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
+                    }}
+                  >
+                    {t.setPassword}
+                  </p>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      background: 'var(--bg)',
+                      border: '1.5px solid var(--border)',
+                      borderRadius: '10px',
+                      padding: '4px 4px 4px 12px',
+                    }}
+                    onFocusCapture={(e) => {
+                      (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--accent)';
+                      (e.currentTarget as HTMLDivElement).style.boxShadow =
+                        '0 0 0 3px rgba(184,132,90,0.12)';
+                    }}
+                    onBlurCapture={(e) => {
+                      (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border)';
+                      (e.currentTarget as HTMLDivElement).style.boxShadow = 'none';
+                    }}
+                  >
+                    <Lock
+                      size={14}
+                      strokeWidth={2}
+                      style={{ color: 'var(--text-muted)', marginRight: '8px', flexShrink: 0 }}
+                    />
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder={t.passwordPlaceholder}
+                      style={{
+                        flex: 1,
+                        border: 'none',
+                        outline: 'none',
+                        background: 'transparent',
+                        fontSize: '14px',
+                        fontWeight: 500,
+                        color: 'var(--text-primary)',
+                        fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
+                        padding: '8px 0',
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '7px',
+                        border: 'none',
+                        background: 'transparent',
+                        cursor: 'pointer',
+                        color: 'var(--text-muted)',
+                        transition: 'color 0.15s',
+                      }}
+                      onMouseEnter={(e) =>
+                        ((e.currentTarget as HTMLButtonElement).style.color =
+                          'var(--text-primary)')
+                      }
+                      onMouseLeave={(e) =>
+                        ((e.currentTarget as HTMLButtonElement).style.color = 'var(--text-muted)')
+                      }
+                    >
+                      {showPassword ? (
+                        <EyeOff size={14} strokeWidth={2} />
+                      ) : (
+                        <Eye size={14} strokeWidth={2} />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </form>
 
         {/* ── Result card ── */}
@@ -524,12 +776,17 @@ export default function UrlShortenerForm({ onHistoryUpdate }: UrlShortenerFormPr
             <div style={{ height: '2px', background: 'linear-gradient(90deg, var(--success), #A8CC98, var(--success))' }} />
 
             <div style={{ padding: '20px' }}>
-              {/* Status */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '7px', marginBottom: '14px' }}>
-                <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'var(--success)', boxShadow: '0 0 0 2px rgba(124,158,110,0.2)' }} />
-                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--success)', letterSpacing: '0.07em', textTransform: 'uppercase', fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif' }}>
-                  {t.ready}
-                </span>
+              {/* Status row */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '14px', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
+                  <div style={{ width: '7px', height: '7px', borderRadius: '50%', background: 'var(--success)', boxShadow: '0 0 0 2px rgba(124,158,110,0.2)' }} />
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--success)', letterSpacing: '0.07em', textTransform: 'uppercase', fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif' }}>
+                    {t.ready}
+                  </span>
+                </div>
+                {result.scan_status && (
+                  <ScanStatusBadge status={result.scan_status} />
+                )}
               </div>
 
               {/* Short URL — prominent */}

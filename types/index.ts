@@ -4,6 +4,10 @@ export interface UrlRecord {
   short_code: string;
   created_at: string;
   click_count: number;
+  password_hash: string | null;
+  safe_mode: boolean;
+  scan_status: string;
+  scanned_at: string | null;
 }
 
 export interface HistoryItem {
@@ -17,6 +21,8 @@ export interface ShortenResponse {
   short_code: string;
   short_url: string;
   original_url: string;
+  safe_mode: boolean;
+  scan_status: string;
 }
 
 export interface ShortenError {
