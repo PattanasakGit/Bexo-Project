@@ -32,3 +32,11 @@ export function truncateUrl(url: string, maxLength: number = 50): string {
   if (url.length <= maxLength) return url;
   return url.slice(0, maxLength) + '…';
 }
+
+export function normalizeUrl(url: string): string {
+  const trimmed = url.trim();
+  if (trimmed && !/^https?:\/\//i.test(trimmed)) {
+    return `https://${trimmed}`;
+  }
+  return trimmed;
+}

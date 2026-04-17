@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabase } from '@/lib/supabase';
-import { generateShortCode, isValidUrl, getBaseUrl } from '@/lib/utils';
+import { generateShortCode, isValidUrl, normalizeUrl, getBaseUrl } from '@/lib/utils';
 import { CreatePageRequest } from '@/types';
 
 export async function POST(request: NextRequest) {
@@ -31,9 +31,10 @@ export async function POST(request: NextRequest) {
       if (link.title.trim().length > 80) {
         return NextResponse.json({ error: 'Link title must be 80 characters or less' }, { status: 400 });
       }
-      if (!link.url || !isValidUrl(link.url.trim())) {
+      const normalizedLinkUrl = normalizeUrl(link.url ?? '');
+      if (!normalizedLinkUrl || !isValidUrl(normalizedLinkUrl)) {
         return NextResponse.json(
-          { error: `Invalid URL: ${link.url}. Must start with http:// or https://` },
+          { error: `Invalid URL: ${link.url}. Must be a valid web address.` },
           { status: 400 }
         );
       }
@@ -76,7 +77,7 @@ export async function POST(request: NextRequest) {
     const linkRows = links.map((link, i) => ({
       page_id: page.id,
       title: link.title.trim(),
-      url: link.url.trim(),
+      url: normalizeUrl(link.url),
       position: i,
     }));
 

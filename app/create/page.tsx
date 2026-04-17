@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Link2, Plus, Trash2, ChevronUp, ChevronDown, Copy, Check, LayoutGrid } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { isValidUrl, getBaseUrl } from '@/lib/utils';
+import { isValidUrl, normalizeUrl } from '@/lib/utils';
 import { CreatePageResponse, PageHistoryItem } from '@/types';
 
 const EMOJI_OPTIONS = ['🔗', '🌟', '🚀', '💡', '🎯', '🎨', '📱', '💼', '🌈', '🔥', '💎', '🎵', '📸', '✈️', '🌿', '🦋', '🍀', '🎉'];
@@ -81,7 +81,8 @@ export default function CreatePage() {
     if (validLinks.length > 20) return t.errorTooManyLinks;
     for (const l of validLinks) {
       if (!l.title.trim()) return 'Each link must have a title';
-      if (!l.url.trim() || !isValidUrl(l.url.trim())) return `Invalid URL: ${l.url || '(empty)'}`;
+      const normalized = normalizeUrl(l.url);
+      if (!normalized || !isValidUrl(normalized)) return `Invalid URL: ${l.url || '(empty)'}`;
     }
     return null;
   };
@@ -103,7 +104,7 @@ export default function CreatePage() {
           bio: bio.trim() || undefined,
           avatar_emoji: emoji,
           theme,
-          links: validLinks.map(l => ({ title: l.title.trim(), url: l.url.trim() })),
+          links: validLinks.map(l => ({ title: l.title.trim(), url: normalizeUrl(l.url) })),
         }),
       });
 
