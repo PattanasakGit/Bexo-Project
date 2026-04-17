@@ -65,6 +65,73 @@ export type Database = {
           },
         ];
       };
+      pages: {
+        Row: {
+          id: string;
+          page_code: string;
+          title: string;
+          bio: string | null;
+          avatar_emoji: string;
+          theme: string;
+          view_count: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          page_code: string;
+          title: string;
+          bio?: string | null;
+          avatar_emoji?: string;
+          theme?: string;
+          view_count?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          page_code?: string;
+          title?: string;
+          bio?: string | null;
+          avatar_emoji?: string;
+          theme?: string;
+          view_count?: number;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      page_links: {
+        Row: {
+          id: string;
+          page_id: string;
+          title: string;
+          url: string;
+          position: number;
+          click_count: number;
+        };
+        Insert: {
+          id?: string;
+          page_id: string;
+          title: string;
+          url: string;
+          position?: number;
+          click_count?: number;
+        };
+        Update: {
+          id?: string;
+          page_id?: string;
+          title?: string;
+          url?: string;
+          position?: number;
+          click_count?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'page_links_page_id_fkey';
+            columns: ['page_id'];
+            referencedRelation: 'pages';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Zap, ShieldOff, BarChart2, Link2 } from 'lucide-react';
+import { Zap, ShieldOff, BarChart2, Link2, LayoutGrid } from 'lucide-react';
 import UrlShortenerForm from '@/components/UrlShortenerForm';
 import HistoryList from '@/components/HistoryList';
 import Navbar from '@/components/Navbar';
@@ -111,6 +111,35 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* ── Create Page CTA ── */}
+        <div style={{ textAlign: 'center', marginBottom: '8px' }}>
+          <a
+            href="/create"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)',
+              textDecoration: 'none', padding: '6px 14px',
+              border: '1.5px solid var(--border)', borderRadius: '999px',
+              background: 'var(--bg-card)', letterSpacing: '0.01em',
+              transition: 'all 0.15s',
+              fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
+            }}
+            onMouseEnter={e => {
+              const el = e.currentTarget as HTMLAnchorElement;
+              el.style.borderColor = 'var(--accent)';
+              el.style.color = 'var(--accent)';
+            }}
+            onMouseLeave={e => {
+              const el = e.currentTarget as HTMLAnchorElement;
+              el.style.borderColor = 'var(--border)';
+              el.style.color = 'var(--text-secondary)';
+            }}
+          >
+            <LayoutGrid size={13} strokeWidth={2} aria-hidden="true" />
+            {t.createPageNav}
+          </a>
+        </div>
 
         {/* ── Feature pills ── */}
         <ul
