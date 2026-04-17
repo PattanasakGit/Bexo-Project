@@ -40,6 +40,20 @@ function saveToHistory(item: HistoryItem) {
   }
 }
 
+function incrementQrCount(shortCode: string) {
+  try {
+    const existing = getHistory();
+    const updated = existing.map((h) =>
+      h.short_code === shortCode ? { ...h, qr_count: (h.qr_count ?? 0) + 1 } : h
+    );
+    const expires = new Date();
+    expires.setDate(expires.getDate() + COOKIE_EXPIRES_DAYS);
+    document.cookie = `${HISTORY_COOKIE_KEY}=${encodeURIComponent(JSON.stringify(updated))}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+  } catch {
+    // ignore
+  }
+}
+
 function getHistory(): HistoryItem[] {
   try {
     const match = document.cookie
@@ -102,7 +116,7 @@ function ScanStatusBadge({ status }: { status: string }) {
 }
 
 /* ─── QR Modal ─────────────────────────────────────────────────────────── */
-function QRModal({ url, onClose }: { url: string; onClose: () => void }) {
+function QRModal({ url, onClose, onDownload }: { url: string; onClose: () => void; onDownload?: () => void }) {
   const { t } = useLanguage();
   const [qrDataUrl, setQrDataUrl] = useState('');
   const [downloaded, setDownloaded] = useState(false);
@@ -127,6 +141,7 @@ function QRModal({ url, onClose }: { url: string; onClose: () => void }) {
     a.download = 'bexo-qr.png';
     a.click();
     setDownloaded(true);
+    onDownload?.();
     setTimeout(() => setDownloaded(false), 1800);
   };
 
@@ -471,6 +486,7 @@ export default function UrlShortenerForm({ onHistoryUpdate }: UrlShortenerFormPr
         original_url: data.original_url,
         short_url: data.short_url,
         created_at: new Date().toISOString(),
+        qr_count: 0,
       });
       onHistoryUpdate?.();
     } catch {
@@ -849,7 +865,16 @@ export default function UrlShortenerForm({ onHistoryUpdate }: UrlShortenerFormPr
         )}
       </div>
 
-      {showQR && result && <QRModal url={result.short_url} onClose={() => setShowQR(false)} />}
+      {showQR && result && (
+        <QRModal
+          url={result.short_url}
+          onClose={() => setShowQR(false)}
+          onDownload={() => {
+            incrementQrCount(result.short_code);
+            onHistoryUpdate?.();
+          }}
+        />
+      )}
       {showShare && result && <SharePanel url={result.short_url} onClose={() => setShowShare(false)} />}
     </>
   );

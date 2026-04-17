@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
-import { Link2, ArrowLeft, Zap, UserX, QrCode, Share2, Clock, BarChart2, Shield } from 'lucide-react';
+import { Link2, Zap, UserX, QrCode, Share2, Clock, BarChart2, Shield } from 'lucide-react';
+import Navbar from '@/components/Navbar';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const FEATURE_ICONS = [Zap, UserX, QrCode, Share2, Clock, BarChart2];
@@ -20,75 +20,7 @@ export default function AboutPage() {
         flexDirection: 'column',
       }}
     >
-      {/* ── Header ──────────────────────────────────────────────────────── */}
-      <header
-        style={{
-          borderBottom: '1px solid var(--border)',
-          background: 'rgba(250,247,242,0.9)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          position: 'sticky',
-          top: 0,
-          zIndex: 10,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '720px',
-            margin: '0 auto',
-            padding: '0 24px',
-            height: '64px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-          }}
-        >
-          {/* Logo */}
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', marginRight: '4px' }}>
-            <div
-              style={{
-                width: '28px', height: '28px', borderRadius: '8px',
-                background: 'var(--accent)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}
-            >
-              <Link2 size={13} strokeWidth={2.5} color="#fff" />
-            </div>
-            <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
-              Bexo
-            </span>
-          </Link>
-
-          <span style={{ color: 'var(--border)', fontSize: '16px' }}>/</span>
-
-          <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-muted)' }}>
-            {t.aboutLink}
-          </span>
-
-          {/* Back link on right */}
-          <Link
-            href="/"
-            style={{
-              marginLeft: 'auto',
-              display: 'flex', alignItems: 'center', gap: '6px',
-              fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)',
-              textDecoration: 'none', padding: '6px 12px', borderRadius: '8px',
-              transition: 'all 0.15s',
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLAnchorElement).style.background = 'var(--bg-subtle)';
-              (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-primary)';
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLAnchorElement).style.background = 'transparent';
-              (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-secondary)';
-            }}
-          >
-            <ArrowLeft size={14} strokeWidth={2.5} />
-            {ab.backHome}
-          </Link>
-        </div>
-      </header>
+      <Navbar />
 
       {/* ── Content ─────────────────────────────────────────────────────── */}
       <main style={{ flex: 1, maxWidth: '720px', margin: '0 auto', width: '100%', padding: '64px 24px 96px' }}>
@@ -106,6 +38,7 @@ export default function AboutPage() {
             }}
           >
             <div
+              aria-hidden="true"
               style={{
                 width: '32px', height: '32px', borderRadius: '9px',
                 background: 'var(--accent)',
@@ -131,18 +64,12 @@ export default function AboutPage() {
           >
             {ab.title}
           </h1>
-          <p
-            style={{
-              fontSize: '16px', color: 'var(--text-secondary)', fontWeight: 500,
-              lineHeight: 1.65, margin: 0, maxWidth: '520px',
-            }}
-          >
+          <p style={{ fontSize: '16px', color: 'var(--text-secondary)', fontWeight: 500, lineHeight: 1.65, margin: 0, maxWidth: '520px' }}>
             {ab.subtitle}
           </p>
         </div>
 
-        {/* Divider */}
-        <div style={{ height: '1px', background: 'var(--border)', marginBottom: '48px' }} />
+        <div aria-hidden="true" style={{ height: '1px', background: 'var(--border)', marginBottom: '48px' }} />
 
         {/* What is Bexo */}
         <Section label="01" title={ab.whatTitle}>
@@ -163,6 +90,7 @@ export default function AboutPage() {
                 }}
               >
                 <span
+                  aria-hidden="true"
                   style={{
                     flexShrink: 0, width: '26px', height: '26px',
                     borderRadius: '8px', background: 'var(--accent)', color: '#fff',
@@ -190,7 +118,7 @@ export default function AboutPage() {
             {ab.features.map((f, i) => {
               const Icon = FEATURE_ICONS[i] ?? Zap;
               return (
-                <div
+                <article
                   key={i}
                   style={{
                     background: 'var(--bg-card)',
@@ -201,15 +129,16 @@ export default function AboutPage() {
                     transition: 'border-color 0.15s, box-shadow 0.15s',
                   }}
                   onMouseEnter={e => {
-                    (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border-hover)';
-                    (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 16px rgba(44,32,20,0.07)';
+                    (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-hover)';
+                    (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 16px rgba(44,32,20,0.07)';
                   }}
                   onMouseLeave={e => {
-                    (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--border)';
-                    (e.currentTarget as HTMLDivElement).style.boxShadow = 'none';
+                    (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)';
+                    (e.currentTarget as HTMLElement).style.boxShadow = 'none';
                   }}
                 >
                   <div
+                    aria-hidden="true"
                     style={{
                       width: '34px', height: '34px', borderRadius: '10px',
                       background: 'var(--accent-light)',
@@ -219,14 +148,14 @@ export default function AboutPage() {
                     <Icon size={16} strokeWidth={2} style={{ color: 'var(--accent)' }} />
                   </div>
                   <div>
-                    <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', margin: '0 0 4px' }}>
+                    <h3 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)', margin: '0 0 4px' }}>
                       {f.name}
-                    </p>
+                    </h3>
                     <p style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: 500, margin: 0, lineHeight: 1.55 }}>
                       {f.desc}
                     </p>
                   </div>
-                </div>
+                </article>
               );
             })}
           </div>
@@ -244,6 +173,7 @@ export default function AboutPage() {
             }}
           >
             <div
+              aria-hidden="true"
               style={{
                 width: '36px', height: '36px', borderRadius: '10px',
                 background: 'var(--accent-light)',
@@ -260,7 +190,7 @@ export default function AboutPage() {
       </main>
 
       {/* ── Footer ──────────────────────────────────────────────────────── */}
-      <footer style={{ borderTop: '1px solid var(--border)' }}>
+      <footer style={{ borderTop: '1px solid var(--border)' }} aria-label="Site footer">
         <div
           style={{
             maxWidth: '720px', margin: '0 auto', padding: '22px 24px',
@@ -270,11 +200,8 @@ export default function AboutPage() {
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div
-              style={{
-                width: '22px', height: '22px', borderRadius: '7px',
-                background: 'var(--accent)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}
+              aria-hidden="true"
+              style={{ width: '22px', height: '22px', borderRadius: '7px', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >
               <Link2 size={11} strokeWidth={2.5} color="#fff" />
             </div>
@@ -311,26 +238,17 @@ function Section({
         marginBottom: last ? 0 : '52px',
       }}
     >
-      {/* Section number */}
       <div style={{ paddingTop: '3px' }}>
         <span
-          style={{
-            fontSize: '11px', fontWeight: 800, color: 'var(--text-muted)',
-            letterSpacing: '0.08em', fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
-          }}
+          aria-hidden="true"
+          style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-muted)', letterSpacing: '0.08em' }}
         >
           {label}
         </span>
       </div>
 
-      {/* Content */}
       <div>
-        <h2
-          style={{
-            fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)',
-            letterSpacing: '-0.02em', margin: '0 0 18px',
-          }}
-        >
+        <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em', margin: '0 0 18px' }}>
           {title}
         </h2>
         {children}

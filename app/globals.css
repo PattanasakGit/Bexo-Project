@@ -61,3 +61,27 @@ body {
 .animate-spin {
   animation: spin 0.8s linear infinite;
 }
+
+/* ─── Navbar responsive ──────────────────────────────────────────────────── */
+.nav-desktop {
+  display: flex;
+}
+.nav-mobile-toggle {
+  display: none;
+}
+@media (max-width: 639px) {
+  .nav-desktop {
+    display: none !important;
+  }
+  .nav-mobile-toggle {
+    display: flex !important;
+  }
+}
+
+/* ─── History card grid ──────────────────────────────────────────────────── */
+.history-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}

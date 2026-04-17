@@ -64,24 +64,74 @@ export const metadata: Metadata = {
   category: 'technology',
 };
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebApplication',
-  name: 'Bexo URL Shortener',
-  url: BASE_URL,
-  description: 'Free URL shortener. Shorten long URLs instantly without signup.',
-  applicationCategory: 'UtilityApplication',
-  operatingSystem: 'Any',
-  browserRequirements: 'Requires JavaScript',
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-  featureList: [
-    'URL shortening',
-    'QR code generation',
-    'Link sharing',
-    'No registration required',
-    'Link history via browser cookies',
-  ],
-};
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Bexo URL Shortener',
+    url: BASE_URL,
+    description: 'Free URL shortener. Shorten long URLs instantly without signup.',
+    applicationCategory: 'UtilityApplication',
+    operatingSystem: 'Any',
+    browserRequirements: 'Requires JavaScript',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    featureList: [
+      'URL shortening',
+      'QR code generation',
+      'Link sharing',
+      'No registration required',
+      'Link history via browser cookies',
+      'Password-protected links',
+      'Safe mode preview',
+      'Click tracking',
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Bexo',
+    url: BASE_URL,
+    description: 'Free, privacy-first URL shortener — no signup, no tracking, no friction.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'Is Bexo free to use?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes. Bexo is completely free with no registration required.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Do I need an account to shorten URLs?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'No. You can shorten URLs instantly without creating an account.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Where is my link history stored?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Your recent links are stored only in your browser via cookies. They are never uploaded to any server.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'Can I generate a QR code for my short link?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Yes. Every shortened link includes a downloadable QR code generated instantly in your browser.',
+        },
+      },
+    ],
+  },
+];
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -91,6 +141,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <meta name="theme-color" content="#B8845A" />
       </head>
       <body className="min-h-full antialiased">
         <LanguageProvider>
