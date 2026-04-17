@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
 import { ExternalLink, ShieldCheck, ShieldQuestion } from 'lucide-react';
+import WebsitePreview from '@/components/WebsitePreview';
 
 interface PreviewPageProps {
   url: string;
@@ -41,29 +41,6 @@ function ScanBadge({ status }: { status: string }) {
 }
 
 export default function PreviewPage({ url, scanStatus, code }: PreviewPageProps) {
-  const [iframeVisible, setIframeVisible] = useState(false);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    // If onLoad hasn't fired within 6s, assume blocked — keep hidden
-    timeoutRef.current = setTimeout(() => {
-      if (!iframeVisible) setIframeVisible(false);
-    }, 6000);
-    return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function handleIframeLoad() {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    setIframeVisible(true);
-  }
-
-  function handleIframeError() {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    // Stay hidden — no error shown to user
-  }
 
   return (
     <div
@@ -106,28 +83,8 @@ export default function PreviewPage({ url, scanStatus, code }: PreviewPageProps)
             </p>
           </header>
 
-          {/* ── Iframe preview — silently hidden on failure ── */}
-          <div
-            aria-hidden="true"
-            style={{
-              height: iframeVisible ? '240px' : '0',
-              overflow: 'hidden',
-              borderRadius: iframeVisible ? '12px' : '0',
-              border: iframeVisible ? '1.5px solid var(--border, #EDE5DB)' : 'none',
-              marginBottom: iframeVisible ? '16px' : '0',
-              transition: 'height 0.35s ease, margin-bottom 0.35s ease',
-            }}
-          >
-            <iframe
-              src={url}
-              title="Website preview"
-              onLoad={handleIframeLoad}
-              onError={handleIframeError}
-              sandbox="allow-scripts allow-same-origin allow-forms"
-              style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
-              tabIndex={-1}
-            />
-          </div>
+          {/* ── Hybrid preview: tries iframe first, falls back to OG card ── */}
+          <WebsitePreview url={url} />
 
           {/* URL display */}
           <div
