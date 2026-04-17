@@ -4,6 +4,8 @@ import { getSupabase } from '@/lib/supabase';
 import DangerPage from './components/DangerPage';
 import PreviewPage from './components/PreviewPage';
 import PasswordGate from './components/PasswordGate';
+import LandingPage from './components/LandingPage';
+import { PageWithLinks } from '@/types';
 
 interface Props {
   params: Promise<{ code: string }>;
@@ -14,20 +16,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { code } = await params;
   try {
     const supabase = getSupabase();
-    const { data } = await supabase
+
+    const { data: urlData } = await supabase
       .from('urls')
       .select('original_url')
       .eq('short_code', code)
       .maybeSingle();
 
-    if (!data) {
-      return { title: 'Link Not Found — Bexo' };
+    if (urlData) {
+      return {
+        title: 'Redirecting — Bexo',
+        robots: { index: false, follow: false },
+      };
     }
 
-    return {
-      title: 'Redirecting — Bexo',
-      robots: { index: false, follow: false },
-    };
+    const { data: pageData } = await supabase
+      .from('pages')
+      .select('title')
+      .eq('page_code', code)
+      .maybeSingle();
+
+    if (pageData) {
+      return { title: `${pageData.title} — Bexo` };
+    }
+
+    return { title: 'Link Not Found — Bexo' };
   } catch {
     return { title: 'Link Not Found — Bexo' };
   }
@@ -40,46 +53,72 @@ export default async function RedirectPage({ params, searchParams }: Props) {
   try {
     const supabase = getSupabase();
 
+    // 1. Check urls table first
     const { data, error } = await supabase
       .from('urls')
       .select('original_url, click_count, scan_status, password_hash, safe_mode')
       .eq('short_code', code)
       .maybeSingle();
 
-    if (error || !data) {
-      notFound();
+    if (!error && data) {
+      // Malicious → block
+      if (data.scan_status === 'malicious') {
+        return <DangerPage code={code} />;
+      }
+
+      // Password-protected → show gate
+      if (data.password_hash !== null) {
+        return <PasswordGate code={code} />;
+      }
+
+      // Safe mode (per-link) or ?preview=1 → show preview
+      if (data.safe_mode || preview === '1') {
+        return (
+          <PreviewPage
+            url={data.original_url}
+            scanStatus={data.scan_status}
+            code={code}
+          />
+        );
+      }
+
+      // Normal redirect — increment click count (best-effort, non-blocking)
+      const newCount = (data.click_count ?? 0) + 1;
+      void Promise.resolve(
+        supabase.from('urls').update({ click_count: newCount }).eq('short_code', code)
+      ).catch(() => {});
+
+      redirect(data.original_url);
     }
 
-    // 1. Malicious → block
-    if (data.scan_status === 'malicious') {
-      return <DangerPage code={code} />;
-    }
+    // 2. Check pages table
+    const { data: page } = await supabase
+      .from('pages')
+      .select('*, page_links(*)')
+      .eq('page_code', code)
+      .maybeSingle();
 
-    // 2. Password-protected → show gate
-    if (data.password_hash !== null) {
-      return <PasswordGate code={code} />;
-    }
+    if (page) {
+      // Increment view_count non-blocking
+      void Promise.resolve(
+        supabase
+          .from('pages')
+          .update({ view_count: (page.view_count ?? 0) + 1 })
+          .eq('page_code', code)
+      ).catch(() => {});
 
-    // 3. Safe mode (per-link) or ?preview=1 → show preview
-    if (data.safe_mode || preview === '1') {
-      return (
-        <PreviewPage
-          url={data.original_url}
-          scanStatus={data.scan_status}
-          code={code}
-        />
+      const pageWithLinks = page as PageWithLinks;
+      pageWithLinks.page_links = (pageWithLinks.page_links ?? []).sort(
+        (a, b) => a.position - b.position
       );
+
+      return <LandingPage page={pageWithLinks} />;
     }
 
-    // 4. Normal redirect — increment click count (best-effort, non-blocking)
-    const newCount = (data.click_count ?? 0) + 1;
-    void Promise.resolve(
-      supabase.from('urls').update({ click_count: newCount }).eq('short_code', code)
-    ).catch(() => {});
-
-    redirect(data.original_url);
+    // 3. Not found in either table
+    notFound();
   } catch (err) {
-    // Re-throw Next.js redirect errors (redirect() throws internally)
+    // Re-throw Next.js redirect errors
     if ((err as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) {
       throw err;
     }

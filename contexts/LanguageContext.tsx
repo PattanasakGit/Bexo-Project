@@ -53,6 +53,31 @@ export interface Translations {
   passwordGateSubmit: string;
   passwordGateError: string;
   passwordGateVerifying: string;
+  // Page creation
+  createPageNav: string;
+  createPageHeading: string;
+  createPageSub: string;
+  pageTitle: string;
+  pageTitlePlaceholder: string;
+  pageBio: string;
+  pageBioPlaceholder: string;
+  chooseEmoji: string;
+  addLink: string;
+  linkTitle: string;
+  linkUrl: string;
+  removeLink: string;
+  chooseTheme: string;
+  themeWarm: string;
+  themeDark: string;
+  themeGradient: string;
+  createPageBtn: string;
+  creatingPage: string;
+  pageReady: string;
+  viewPage: string;
+  errorPageTitle: string;
+  errorNoLinks: string;
+  errorTooManyLinks: string;
+  poweredBy: string;
   about: {
     title: string;
     subtitle: string;
@@ -198,6 +223,30 @@ const translations: Record<Language, Translations> = {
     passwordGateSubmit: 'Unlock Link',
     passwordGateError: 'Incorrect password. Please try again.',
     passwordGateVerifying: 'Verifying…',
+    createPageNav: 'Create link page',
+    createPageHeading: 'Create your link page',
+    createPageSub: 'Collect all your links in one place',
+    pageTitle: 'Page Title',
+    pageTitlePlaceholder: 'e.g. My Links',
+    pageBio: 'Bio',
+    pageBioPlaceholder: 'Short description (optional)',
+    chooseEmoji: 'Choose an icon',
+    addLink: 'Add Link',
+    linkTitle: 'Link title',
+    linkUrl: 'URL',
+    removeLink: 'Remove',
+    chooseTheme: 'Theme',
+    themeWarm: 'Warm',
+    themeDark: 'Dark',
+    themeGradient: 'Gradient',
+    createPageBtn: 'Create My Page',
+    creatingPage: 'Creating…',
+    pageReady: 'Your page is ready!',
+    viewPage: 'View Page',
+    errorPageTitle: 'Please enter a page title',
+    errorNoLinks: 'Please add at least one link',
+    errorTooManyLinks: 'Maximum 20 links allowed',
+    poweredBy: 'Powered by Bexo',
     about: {
       title: 'About Bexo',
       subtitle: 'Fast, private URL shortening — no account, no tracking, no friction.',
@@ -345,6 +394,30 @@ const translations: Record<Language, Translations> = {
     passwordGateSubmit: 'ปลดล็อกลิงก์',
     passwordGateError: 'รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่',
     passwordGateVerifying: 'กำลังตรวจสอบ…',
+    createPageNav: 'สร้างหน้ารวมลิงก์',
+    createPageHeading: 'สร้างหน้ารวมลิงก์ของคุณ',
+    createPageSub: 'รวมลิงก์ทั้งหมดไว้ในที่เดียว',
+    pageTitle: 'ชื่อหน้า',
+    pageTitlePlaceholder: 'เช่น ลิงก์ของฉัน',
+    pageBio: 'คำอธิบาย',
+    pageBioPlaceholder: 'คำอธิบายสั้นๆ (ไม่บังคับ)',
+    chooseEmoji: 'เลือกไอคอน',
+    addLink: 'เพิ่มลิงก์',
+    linkTitle: 'ชื่อลิงก์',
+    linkUrl: 'URL',
+    removeLink: 'ลบ',
+    chooseTheme: 'ธีม',
+    themeWarm: 'อบอุ่น',
+    themeDark: 'มืด',
+    themeGradient: 'ไล่สี',
+    createPageBtn: 'สร้างหน้าของฉัน',
+    creatingPage: 'กำลังสร้าง…',
+    pageReady: 'หน้าของคุณพร้อมแล้ว!',
+    viewPage: 'ดูหน้า',
+    errorPageTitle: 'กรุณากรอกชื่อหน้า',
+    errorNoLinks: 'กรุณาเพิ่มลิงก์อย่างน้อย 1 รายการ',
+    errorTooManyLinks: 'เพิ่มได้สูงสุด 20 ลิงก์',
+    poweredBy: 'ขับเคลื่อนโดย Bexo',
     about: {
       title: 'เกี่ยวกับ Bexo',
       subtitle: 'ย่อ URL รวดเร็ว ปลอดภัย ไม่ต้องสมัคร ไม่ต้องเปิดเผยข้อมูล',
@@ -492,6 +565,30 @@ const translations: Record<Language, Translations> = {
     passwordGateSubmit: 'リンクを解錠',
     passwordGateError: 'パスワードが正しくありません。再試行してください。',
     passwordGateVerifying: '確認中…',
+    createPageNav: 'リンクページを作成',
+    createPageHeading: 'リンクページを作成',
+    createPageSub: 'すべてのリンクを一か所にまとめましょう',
+    pageTitle: 'ページタイトル',
+    pageTitlePlaceholder: '例：マイリンク',
+    pageBio: '自己紹介',
+    pageBioPlaceholder: '短い説明（任意）',
+    chooseEmoji: 'アイコンを選択',
+    addLink: 'リンクを追加',
+    linkTitle: 'リンクのタイトル',
+    linkUrl: 'URL',
+    removeLink: '削除',
+    chooseTheme: 'テーマ',
+    themeWarm: 'ウォーム',
+    themeDark: 'ダーク',
+    themeGradient: 'グラデーション',
+    createPageBtn: 'ページを作成',
+    creatingPage: '作成中…',
+    pageReady: 'ページが完成しました！',
+    viewPage: 'ページを見る',
+    errorPageTitle: 'ページタイトルを入力してください',
+    errorNoLinks: 'リンクを少なくとも1つ追加してください',
+    errorTooManyLinks: 'リンクは最大20件までです',
+    poweredBy: 'Powered by Bexo',
     about: {
       title: 'Bexoについて',
       subtitle: '高速・プライベート・登録不要のURL短縮サービス',
