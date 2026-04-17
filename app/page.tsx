@@ -1,25 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
-import { Link2, Zap, ShieldOff, BarChart2 } from 'lucide-react';
+import { Zap, ShieldOff, BarChart2, Link2 } from 'lucide-react';
 import UrlShortenerForm from '@/components/UrlShortenerForm';
 import HistoryList from '@/components/HistoryList';
-import { useLanguage, Language } from '@/contexts/LanguageContext';
-import { useAuth } from '@/contexts/AuthContext';
-
-const LANG_OPTIONS: { code: Language; label: string }[] = [
-  { code: 'en', label: 'EN' },
-  { code: 'th', label: 'TH' },
-  { code: 'ja', label: 'JA' },
-];
+import Navbar from '@/components/Navbar';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const PILL_ICONS = [Zap, ShieldOff, BarChart2];
 
 export default function Home() {
   const [historyTrigger, setHistoryTrigger] = useState(0);
-  const { lang, setLang, t } = useLanguage();
-  const { user, isLoading: authLoading } = useAuth();
+  const { t } = useLanguage();
 
   return (
     <div
@@ -31,192 +23,7 @@ export default function Home() {
         fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
       }}
     >
-      {/* ── Header ──────────────────────────────────────────────────────── */}
-      <header
-        style={{
-          borderBottom: '1px solid var(--border)',
-          background: 'rgba(250,247,242,0.9)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          position: 'sticky',
-          top: 0,
-          zIndex: 10,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '720px',
-            margin: '0 auto',
-            padding: '0 24px',
-            height: '64px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div
-              style={{
-                width: '34px',
-                height: '34px',
-                borderRadius: '10px',
-                background: 'var(--accent)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                boxShadow: '0 2px 8px rgba(184,132,90,0.35)',
-              }}
-            >
-              <Link2 size={16} strokeWidth={2.5} color="#fff" />
-            </div>
-            <span
-              style={{
-                fontSize: '19px',
-                fontWeight: 800,
-                color: 'var(--text-primary)',
-                letterSpacing: '-0.03em',
-              }}
-            >
-              Bexo
-            </span>
-          </div>
-
-          {/* Right nav */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Link
-              href="/about"
-              style={{
-                fontSize: '13px',
-                fontWeight: 600,
-                color: 'var(--text-secondary)',
-                textDecoration: 'none',
-                padding: '6px 13px',
-                borderRadius: '8px',
-                transition: 'all 0.15s',
-              }}
-              onMouseEnter={e => {
-                (e.currentTarget as HTMLAnchorElement).style.background = 'var(--bg-subtle)';
-                (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-primary)';
-              }}
-              onMouseLeave={e => {
-                (e.currentTarget as HTMLAnchorElement).style.background = 'transparent';
-                (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-secondary)';
-              }}
-            >
-              {t.aboutLink}
-            </Link>
-
-            {/* Auth nav */}
-            {!authLoading && (
-              user ? (
-                <Link
-                  href="/dashboard"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '7px',
-                    fontSize: '13px',
-                    fontWeight: 700,
-                    color: 'var(--text-primary)',
-                    textDecoration: 'none',
-                    padding: '5px 12px 5px 6px',
-                    borderRadius: '9px',
-                    background: 'var(--bg-subtle)',
-                    border: '1px solid var(--border)',
-                    transition: 'all 0.15s',
-                  }}
-                  onMouseEnter={e => {
-                    (e.currentTarget as HTMLAnchorElement).style.borderColor = 'var(--accent)';
-                  }}
-                  onMouseLeave={e => {
-                    (e.currentTarget as HTMLAnchorElement).style.borderColor = 'var(--border)';
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '24px',
-                      height: '24px',
-                      borderRadius: '7px',
-                      background: 'var(--accent)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <span style={{ fontSize: '10px', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
-                      {(user.email ?? 'U').slice(0, 2).toUpperCase()}
-                    </span>
-                  </div>
-                  {t.auth.dashboardLink}
-                </Link>
-              ) : (
-                <Link
-                  href="/auth/login"
-                  style={{
-                    fontSize: '13px',
-                    fontWeight: 700,
-                    color: '#fff',
-                    textDecoration: 'none',
-                    padding: '6px 14px',
-                    borderRadius: '9px',
-                    background: 'var(--accent)',
-                    transition: 'background 0.15s',
-                  }}
-                  onMouseEnter={e => {
-                    (e.currentTarget as HTMLAnchorElement).style.background = 'var(--accent-hover)';
-                  }}
-                  onMouseLeave={e => {
-                    (e.currentTarget as HTMLAnchorElement).style.background = 'var(--accent)';
-                  }}
-                >
-                  {t.auth.loginLink}
-                </Link>
-              )
-            )}
-
-            {/* Divider */}
-            <div style={{ width: '1px', height: '16px', background: 'var(--border)', margin: '0 4px' }} />
-
-            {/* Language switcher */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                background: 'var(--bg-subtle)',
-                border: '1px solid var(--border)',
-                borderRadius: '10px',
-                padding: '3px',
-                gap: '2px',
-              }}
-            >
-              {LANG_OPTIONS.map(({ code, label }) => (
-                <button
-                  key={code}
-                  onClick={() => setLang(code)}
-                  style={{
-                    fontSize: '12px',
-                    fontWeight: 700,
-                    padding: '4px 10px',
-                    borderRadius: '7px',
-                    border: 'none',
-                    background: lang === code ? 'var(--bg-card)' : 'transparent',
-                    color: lang === code ? 'var(--text-primary)' : 'var(--text-muted)',
-                    cursor: 'pointer',
-                    transition: 'all 0.15s',
-                    boxShadow: lang === code ? '0 1px 4px rgba(44,32,20,0.1)' : 'none',
-                    fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif',
-                    letterSpacing: '0.02em',
-                  }}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </header>
+      <Navbar />
 
       {/* ── Main ────────────────────────────────────────────────────────── */}
       <main
@@ -232,6 +39,7 @@ export default function Home() {
         <div className="animate-fade-in" style={{ textAlign: 'center', marginBottom: '48px' }}>
           {/* Status badge */}
           <div
+            aria-label="Service status: free, instant, no account required"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -245,27 +53,19 @@ export default function Home() {
             }}
           >
             <div
+              aria-hidden="true"
               style={{
-                width: '7px',
-                height: '7px',
-                borderRadius: '50%',
+                width: '7px', height: '7px', borderRadius: '50%',
                 background: 'var(--success)',
                 boxShadow: '0 0 0 2px rgba(124,158,110,0.2)',
               }}
             />
-            <span
-              style={{
-                fontSize: '12px',
-                fontWeight: 700,
-                color: 'var(--text-secondary)',
-                letterSpacing: '0.03em',
-              }}
-            >
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0.03em' }}>
               {t.badge}
             </span>
           </div>
 
-          {/* Two-line headline */}
+          {/* Heading */}
           <h1
             style={{
               fontSize: 'clamp(40px, 9vw, 64px)',
@@ -295,103 +95,68 @@ export default function Home() {
         </div>
 
         {/* ── Form card ── */}
-        <div
-          style={{
-            background: 'var(--bg-card)',
-            border: '1.5px solid var(--border)',
-            borderRadius: '24px',
-            overflow: 'hidden',
-            boxShadow: '0 8px 40px rgba(44,32,20,0.09), 0 1px 0 rgba(255,255,255,0.6) inset',
-            marginBottom: '14px',
-          }}
-        >
-          {/* Gradient accent top bar */}
+        <section aria-label="URL shortener" style={{ marginBottom: '14px' }}>
           <div
             style={{
-              height: '3px',
-              background: 'linear-gradient(90deg, #D4A876, var(--accent), #9A6E48)',
+              background: 'var(--bg-card)',
+              border: '1.5px solid var(--border)',
+              borderRadius: '24px',
+              overflow: 'hidden',
+              boxShadow: '0 8px 40px rgba(44,32,20,0.09), 0 1px 0 rgba(255,255,255,0.6) inset',
             }}
-          />
-          <div style={{ padding: '28px 32px 32px' }}>
-            <UrlShortenerForm onHistoryUpdate={() => setHistoryTrigger((n) => n + 1)} />
+          >
+            <div aria-hidden="true" style={{ height: '3px', background: 'linear-gradient(90deg, #D4A876, var(--accent), #9A6E48)' }} />
+            <div style={{ padding: '28px 32px 32px' }}>
+              <UrlShortenerForm onHistoryUpdate={() => setHistoryTrigger((n) => n + 1)} />
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* ── Feature row ── */}
-        <div
+        {/* ── Feature pills ── */}
+        <ul
+          aria-label="Key features"
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '24px',
-            flexWrap: 'wrap',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            gap: '24px', flexWrap: 'wrap',
             marginBottom: '8px',
+            listStyle: 'none', padding: 0, margin: '0 0 8px',
           }}
         >
           {t.pills.map((label, i) => {
             const Icon = PILL_ICONS[i];
             return (
-              <div
-                key={label}
-                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-              >
-                <Icon size={13} strokeWidth={2} style={{ color: 'var(--text-muted)' }} />
-                <span
-                  style={{
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    color: 'var(--text-muted)',
-                    letterSpacing: '0.01em',
-                  }}
-                >
+              <li key={label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Icon size={13} strokeWidth={2} style={{ color: 'var(--text-muted)' }} aria-hidden="true" />
+                <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', letterSpacing: '0.01em' }}>
                   {label}
                 </span>
                 {i < t.pills.length - 1 && (
-                  <span
-                    style={{
-                      marginLeft: '24px',
-                      fontSize: '12px',
-                      color: 'var(--border)',
-                      userSelect: 'none',
-                    }}
-                  >
+                  <span aria-hidden="true" style={{ marginLeft: '24px', fontSize: '12px', color: 'var(--border)', userSelect: 'none' }}>
                     ·
                   </span>
                 )}
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
 
         {/* ── History ── */}
         <HistoryList refreshTrigger={historyTrigger} />
       </main>
 
       {/* ── Footer ──────────────────────────────────────────────────────── */}
-      <footer style={{ borderTop: '1px solid var(--border)' }}>
+      <footer style={{ borderTop: '1px solid var(--border)' }} aria-label="Site footer">
         <div
           style={{
-            maxWidth: '720px',
-            margin: '0 auto',
-            padding: '22px 24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '8px',
+            maxWidth: '720px', margin: '0 auto', padding: '22px 24px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            flexWrap: 'wrap', gap: '8px',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <div
-              style={{
-                width: '22px',
-                height: '22px',
-                borderRadius: '7px',
-                background: 'var(--accent)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
+              aria-hidden="true"
+              style={{ width: '22px', height: '22px', borderRadius: '7px', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             >
               <Link2 size={11} strokeWidth={2.5} color="#fff" />
             </div>

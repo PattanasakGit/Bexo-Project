@@ -15,6 +15,7 @@ export interface HistoryItem {
   original_url: string;
   short_url: string;
   created_at: string;
+  qr_count?: number;
 }
 
 export interface ShortenResponse {
