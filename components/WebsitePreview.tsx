@@ -9,65 +9,75 @@ interface OGData {
   site_name: string | null;
   favicon: string | null;
   url: string;
+  can_embed: boolean;
 }
 
-type Phase = 'iframe' | 'og-loading' | 'og-ready' | 'hidden';
+type Phase = 'og-loading' | 'iframe' | 'og-ready' | 'hidden';
 
 interface WebsitePreviewProps {
   url: string;
 }
 
 export default function WebsitePreview({ url }: WebsitePreviewProps) {
-  const [phase, setPhase] = useState<Phase>('iframe');
-  const [iframeVisible, setIframeVisible] = useState(false);
+  const [phase, setPhase] = useState<Phase>('og-loading');
   const [ogData, setOGData] = useState<OGData | null>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const fallbackTriggeredRef = useRef(false);
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+  const iframeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Holds OG data so iframe callbacks can access it without stale closure
+  const ogDataRef = useRef<OGData | null>(null);
 
   useEffect(() => {
-    timeoutRef.current = setTimeout(() => {
-      triggerFallback();
-    }, 3000);
+    let cancelled = false;
+
+    async function load() {
+      try {
+        const res = await fetch(`/api/og-preview?url=${encodeURIComponent(url)}`);
+        if (cancelled) return;
+        const data: OGData = await res.json();
+        if (cancelled) return;
+
+        const hasContent = !!(data.title || data.description || data.image);
+        ogDataRef.current = hasContent ? data : null;
+
+        if (data.can_embed) {
+          // Site allows iframes — try showing it, fall back to OG on timeout
+          setOGData(hasContent ? data : null);
+          setPhase('iframe');
+          iframeTimerRef.current = setTimeout(() => {
+            setPhase(hasContent ? 'og-ready' : 'hidden');
+          }, 3000);
+        } else if (hasContent) {
+          setOGData(data);
+          setPhase('og-ready');
+        } else {
+          setPhase('hidden');
+        }
+      } catch {
+        if (!cancelled) setPhase('hidden');
+      }
+    }
+
+    load();
     return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      cancelled = true;
+      if (iframeTimerRef.current) clearTimeout(iframeTimerRef.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function triggerFallback() {
-    if (fallbackTriggeredRef.current) return;
-    fallbackTriggeredRef.current = true;
-    setPhase('og-loading');
-    fetchOGData();
-  }
-
-  async function fetchOGData() {
-    try {
-      const res = await fetch(`/api/og-preview?url=${encodeURIComponent(url)}`);
-      if (!res.ok) { setPhase('hidden'); return; }
-      const data: OGData = await res.json();
-      if (data.title || data.description || data.image) {
-        setOGData(data);
-        setPhase('og-ready');
-      } else {
-        setPhase('hidden');
-      }
-    } catch {
-      setPhase('hidden');
-    }
-  }
-
   function handleIframeLoad() {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    if (fallbackTriggeredRef.current) return; // already in OG phase
-    setIframeVisible(true);
+    if (iframeTimerRef.current) clearTimeout(iframeTimerRef.current);
+    setIframeLoaded(true);
   }
 
   function handleIframeError() {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    triggerFallback();
+    if (iframeTimerRef.current) clearTimeout(iframeTimerRef.current);
+    const data = ogDataRef.current;
+    if (data) { setOGData(data); setPhase('og-ready'); }
+    else setPhase('hidden');
   }
 
+  if (phase === 'og-loading') return <OGSkeleton />;
   if (phase === 'hidden') return null;
 
   if (phase === 'iframe') {
@@ -75,11 +85,11 @@ export default function WebsitePreview({ url }: WebsitePreviewProps) {
       <div
         aria-hidden="true"
         style={{
-          height: iframeVisible ? '240px' : '0',
+          height: iframeLoaded ? '240px' : '0',
           overflow: 'hidden',
-          borderRadius: iframeVisible ? '12px' : '0',
-          border: iframeVisible ? '1.5px solid var(--border, #EDE5DB)' : 'none',
-          marginBottom: iframeVisible ? '16px' : '0',
+          borderRadius: iframeLoaded ? '12px' : '0',
+          border: iframeLoaded ? '1.5px solid var(--border, #EDE5DB)' : 'none',
+          marginBottom: iframeLoaded ? '16px' : '0',
           transition: 'height 0.35s ease, margin-bottom 0.35s ease',
         }}
       >
@@ -94,10 +104,6 @@ export default function WebsitePreview({ url }: WebsitePreviewProps) {
         />
       </div>
     );
-  }
-
-  if (phase === 'og-loading') {
-    return <OGSkeleton />;
   }
 
   if (phase === 'og-ready' && ogData) {

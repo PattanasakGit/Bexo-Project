@@ -7,6 +7,7 @@ interface OGResult {
   site_name: string | null;
   favicon: string | null;
   url: string;
+  can_embed: boolean;
 }
 
 function decodeHtml(text: string): string {
@@ -38,9 +39,27 @@ function extractTitle(html: string): string | null {
   return match?.[1] ? decodeHtml(match[1].trim()) : null;
 }
 
+function checkCanEmbed(response: Response): boolean {
+  const xfo = response.headers.get('x-frame-options')?.toLowerCase().trim() ?? '';
+  if (xfo === 'deny' || xfo === 'sameorigin') return false;
+
+  const csp = response.headers.get('content-security-policy')?.toLowerCase() ?? '';
+  const faMatch = csp.match(/frame-ancestors\s+([^;]+)/i);
+  if (faMatch) {
+    const fa = faMatch[1].trim();
+    // 'none' means no embedding allowed
+    if (fa === "'none'" || fa === '"none"' || fa === 'none') return false;
+  }
+
+  return true;
+}
+
 export async function GET(request: NextRequest) {
   const rawUrl = request.nextUrl.searchParams.get('url');
-  const empty: OGResult = { title: null, description: null, image: null, site_name: null, favicon: null, url: rawUrl ?? '' };
+  const empty: OGResult = {
+    title: null, description: null, image: null,
+    site_name: null, favicon: null, url: rawUrl ?? '', can_embed: false,
+  };
 
   if (!rawUrl) return NextResponse.json(empty);
 
@@ -69,10 +88,14 @@ export async function GET(request: NextRequest) {
 
     if (!response.ok) return NextResponse.json(empty);
 
-    const contentType = response.headers.get('content-type') ?? '';
-    if (!contentType.includes('text/html')) return NextResponse.json(empty);
+    const can_embed = checkCanEmbed(response);
 
-    // Limit to first 200KB — <head> is nearly always within that
+    const contentType = response.headers.get('content-type') ?? '';
+    if (!contentType.includes('text/html')) {
+      return NextResponse.json({ ...empty, can_embed });
+    }
+
+    // Limit parsing to the <head> section (first 200KB max)
     const raw = await response.text();
     const headEnd = raw.indexOf('</head>');
     const html = raw.slice(0, headEnd > -1 ? headEnd + 7 : Math.min(raw.length, 200000));
@@ -105,7 +128,7 @@ export async function GET(request: NextRequest) {
     const favicon = `${parsedUrl.protocol}//${parsedUrl.hostname}/favicon.ico`;
 
     return NextResponse.json(
-      { title, description, image, site_name, favicon, url: rawUrl } satisfies OGResult,
+      { title, description, image, site_name, favicon, url: rawUrl, can_embed } satisfies OGResult,
       { headers: { 'Cache-Control': 'public, max-age=3600, s-maxage=3600' } },
     );
   } catch {
