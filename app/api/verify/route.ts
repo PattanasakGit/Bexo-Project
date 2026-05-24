@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
     const { data, error } = await supabase
       .from('urls')
-      .select('original_url, password_hash, click_count')
+      .select('original_url, password_hash, click_count, safe_mode')
       .eq('short_code', code)
       .maybeSingle();
 
@@ -43,7 +43,9 @@ export async function POST(request: NextRequest) {
       .eq('short_code', code)
       .then(() => {});
 
-    return NextResponse.json({ success: true, url: data.original_url });
+    const destination = data.safe_mode ? `/${code}?preview=1` : data.original_url;
+
+    return NextResponse.json({ success: true, url: destination });
   } catch (error) {
     console.error('Verify API error:', error);
     return NextResponse.json(
