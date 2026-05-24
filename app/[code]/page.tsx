@@ -69,7 +69,7 @@ export default async function RedirectPage({ params, searchParams }: Props) {
 
     if (!error && data) {
       // Malicious → block
-      if (data.scan_status === 'malicious') {
+      if (data.scan_status === 'danger' || data.scan_status === 'malicious') {
         result = { kind: 'danger' };
       }
 

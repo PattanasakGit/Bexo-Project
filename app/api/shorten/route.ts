@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
 
     // Scan URL for malware
     const scanStatus = await scanUrl(trimmedUrl);
-    if (scanStatus === 'malicious') {
+    if (scanStatus === 'danger') {
       return NextResponse.json(
         { error: 'This URL has been flagged as malicious and cannot be shortened.' },
         { status: 400 }

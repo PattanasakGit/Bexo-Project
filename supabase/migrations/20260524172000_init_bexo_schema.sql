@@ -8,14 +8,14 @@ create table if not exists public.urls (
   click_count integer not null default 0,
   password_hash text,
   safe_mode boolean not null default false,
-  scan_status text not null default 'unknown',
+  scan_status text not null default 'unscanned',
   scanned_at timestamptz,
   user_id uuid references auth.users(id) on delete set null
 );
 
 alter table public.urls add column if not exists password_hash text;
 alter table public.urls add column if not exists safe_mode boolean not null default false;
-alter table public.urls add column if not exists scan_status text not null default 'unknown';
+alter table public.urls add column if not exists scan_status text not null default 'unscanned';
 alter table public.urls add column if not exists scanned_at timestamptz;
 alter table public.urls add column if not exists user_id uuid references auth.users(id) on delete set null;
 alter table public.urls add column if not exists short_code varchar(20);
@@ -24,6 +24,7 @@ alter table public.urls add column if not exists created_at timestamptz;
 alter table public.urls add column if not exists click_count integer;
 alter table public.urls alter column created_at set default now();
 alter table public.urls alter column click_count set default 0;
+alter table public.urls alter column scan_status set default 'unscanned';
 
 create unique index if not exists urls_short_code_key on public.urls(short_code);
 create index if not exists idx_urls_user_id_created_at on public.urls(user_id, created_at desc);
