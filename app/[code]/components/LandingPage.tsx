@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { PageWithLinks, PageLink } from '@/types';
 
 interface ThemeVars {
@@ -218,12 +219,12 @@ export default function LandingPage({ page }: LandingPageProps) {
           }}
         >
           Powered by{' '}
-          <a
+          <Link
             href="/"
             style={{ color: theme.accent, fontWeight: 700, textDecoration: 'none' }}
           >
             Bexo
-          </a>
+          </Link>
         </p>
       </main>
     </div>

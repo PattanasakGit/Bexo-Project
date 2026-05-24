@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { ShieldX } from 'lucide-react';
 
 interface DangerPageProps {
@@ -100,7 +101,7 @@ export default function DangerPage({ code }: DangerPageProps) {
           </div>
 
           {/* Back button */}
-          <a
+          <Link
             href="/"
             style={{
               display: 'inline-flex',
@@ -119,7 +120,7 @@ export default function DangerPage({ code }: DangerPageProps) {
             onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.opacity = '1')}
           >
             ← Back to Safety
-          </a>
+          </Link>
         </div>
       </div>
     </div>

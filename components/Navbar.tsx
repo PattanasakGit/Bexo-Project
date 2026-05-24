@@ -23,7 +23,9 @@ export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  useEffect(() => { setMobileOpen(false); }, [pathname]);
+  useEffect(() => {
+    queueMicrotask(() => setMobileOpen(false));
+  }, [pathname]);
 
   useEffect(() => {
     if (!mobileOpen) return;

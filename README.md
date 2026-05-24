@@ -24,24 +24,9 @@ A modern, minimal URL shortener built with Next.js 15 and Supabase. No signup re
 ### 1. Create Supabase Project
 
 1. Go to [supabase.com](https://supabase.com) and create a new project
-2. In your Supabase dashboard, open the **SQL Editor** and run:
+2. Apply the database migration in `supabase/migrations/20260524172000_init_bexo_schema.sql`
 
-```sql
-CREATE TABLE urls (
-  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-  original_url TEXT NOT NULL,
-  short_code VARCHAR(20) NOT NULL UNIQUE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  click_count INTEGER DEFAULT 0
-);
-
-CREATE INDEX idx_urls_short_code ON urls(short_code);
-
-ALTER TABLE urls ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Allow public read" ON urls FOR SELECT USING (true);
-CREATE POLICY "Allow insert" ON urls FOR INSERT WITH CHECK (true);
-CREATE POLICY "Allow update click_count" ON urls FOR UPDATE USING (true);
-```
+The migration creates the `urls`, `profiles`, `pages`, and `page_links` tables, enables RLS, adds public policies needed for redirects and page rendering, and creates the auth profile trigger.
 
 ### 2. Configure Environment Variables
 
@@ -52,7 +37,7 @@ cp .env.example .env.local
 Fill in your values in `.env.local`:
 - `NEXT_PUBLIC_SUPABASE_URL` — from Supabase → Settings → API → Project URL
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — from Supabase → Settings → API → anon/public key
-- `NEXT_PUBLIC_BASE_URL` — your deployed domain (or `http://localhost:3000` for dev)
+- `NEXT_PUBLIC_BASE_URL` — your deployed domain (or your local dev URL, for example `http://localhost:3000`)
 
 ### 3. Install & Run
 
@@ -62,6 +47,18 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
+
+## Keeping Free Supabase Projects Active
+
+Supabase Free projects can be paused after inactivity. For production, use a paid Supabase plan. For hobby projects, this repo includes a lightweight health endpoint at `/api/health` and a GitHub Actions workflow at `.github/workflows/keep-supabase-awake.yml`.
+
+To enable it after deployment, add a GitHub repository secret:
+
+```text
+KEEPALIVE_URL=https://your-domain.com/api/health
+```
+
+The workflow pings that endpoint every 3 days and can also be run manually from GitHub Actions.
 
 ## Deploy to Vercel
 

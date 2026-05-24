@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { ExternalLink, ShieldCheck, ShieldQuestion } from 'lucide-react';
 import WebsitePreview from '@/components/WebsitePreview';
 
@@ -140,7 +141,7 @@ export default function PreviewPage({ url, scanStatus, code }: PreviewPageProps)
               <ExternalLink size={15} strokeWidth={2.5} aria-hidden="true" />
               Proceed to Destination
             </a>
-            <a
+            <Link
               href="/"
               aria-label="Cancel and go back to Bexo home"
               style={{
@@ -165,7 +166,7 @@ export default function PreviewPage({ url, scanStatus, code }: PreviewPageProps)
               }}
             >
               Cancel
-            </a>
+            </Link>
           </div>
         </div>
       </div>

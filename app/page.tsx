@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Zap, ShieldOff, BarChart2, Link2, LayoutGrid } from 'lucide-react';
 import UrlShortenerForm from '@/components/UrlShortenerForm';
 import HistoryList from '@/components/HistoryList';
@@ -114,7 +115,7 @@ export default function Home() {
 
         {/* ── Create Page CTA ── */}
         <div style={{ textAlign: 'center', marginBottom: '8px' }}>
-          <a
+          <Link
             href="/create"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px',
@@ -138,7 +139,7 @@ export default function Home() {
           >
             <LayoutGrid size={13} strokeWidth={2} aria-hidden="true" />
             {t.createPageNav}
-          </a>
+          </Link>
         </div>
 
         {/* ── Feature pills ── */}

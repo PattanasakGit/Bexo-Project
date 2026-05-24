@@ -6,6 +6,7 @@ import {
   useState,
   useEffect,
   useCallback,
+  useRef,
   ReactNode,
 } from 'react';
 import { useRouter } from 'next/navigation';
@@ -26,6 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const initialized = useRef(false);
 
   useEffect(() => {
     const supabase = getSupabaseBrowser();
@@ -44,7 +46,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(session);
       setUser(session?.user ?? null);
       setIsLoading(false);
-      router.refresh();
+
+      if (!initialized.current) {
+        initialized.current = true;
+        return;
+      }
+
+      if (_event === 'SIGNED_IN' || _event === 'SIGNED_OUT' || _event === 'TOKEN_REFRESHED') {
+        router.refresh();
+      }
     });
 
     return () => subscription.unsubscribe();

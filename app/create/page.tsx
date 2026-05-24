@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Link2, Plus, Trash2, ChevronUp, ChevronDown, Copy, Check, LayoutGrid } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { isValidUrl, getBaseUrl } from '@/lib/utils';
+import { isValidUrl } from '@/lib/utils';
 import { CreatePageResponse, PageHistoryItem } from '@/types';
 
 const EMOJI_OPTIONS = ['🔗', '🌟', '🚀', '💡', '🎯', '🎨', '📱', '💼', '🌈', '🔥', '💎', '🎵', '📸', '✈️', '🌿', '🦋', '🍀', '🎉'];
@@ -167,12 +168,12 @@ export default function CreatePage() {
     return (
       <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', fontFamily: 'var(--font-nunito), Nunito, system-ui, sans-serif' }}>
         <nav style={{ borderBottom: '1px solid var(--border)', padding: '0 24px', height: '56px', display: 'flex', alignItems: 'center', maxWidth: '720px', margin: '0 auto', width: '100%' }}>
-          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
             <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Link2 size={13} strokeWidth={2.5} color="#fff" />
             </div>
             <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>Bexo</span>
-          </a>
+          </Link>
         </nav>
 
         <main style={{ flex: 1, maxWidth: '520px', width: '100%', margin: '0 auto', padding: '60px 24px' }}>
@@ -232,7 +233,7 @@ export default function CreatePage() {
               >
                 {t.viewPage}
               </a>
-              <a
+              <Link
                 href="/create"
                 style={{
                   flex: 1, textAlign: 'center', padding: '10px',
@@ -243,7 +244,7 @@ export default function CreatePage() {
                 }}
               >
                 {t.createPageBtn}
-              </a>
+              </Link>
             </div>
           </div>
         </main>
@@ -256,12 +257,12 @@ export default function CreatePage() {
       {/* Nav */}
       <nav style={{ borderBottom: '1px solid var(--border)', padding: '0 24px', height: '56px', display: 'flex', alignItems: 'center', width: '100%' }}>
         <div style={{ maxWidth: '720px', width: '100%', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
             <div style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Link2 size={13} strokeWidth={2.5} color="#fff" />
             </div>
             <span style={{ fontSize: '16px', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>Bexo</span>
-          </a>
+          </Link>
         </div>
       </nav>
 

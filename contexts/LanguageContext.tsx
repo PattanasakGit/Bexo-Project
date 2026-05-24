@@ -704,7 +704,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     try {
       const saved = localStorage.getItem('bexo-lang') as Language;
       if (saved && ['en', 'th', 'ja'].includes(saved)) {
-        setLangState(saved);
+        queueMicrotask(() => setLangState(saved));
       }
     } catch {
       // ignore

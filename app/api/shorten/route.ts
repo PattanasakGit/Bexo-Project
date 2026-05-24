@@ -1,6 +1,6 @@
 import { createHash } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
-import { getSupabase } from '@/lib/supabase';
+import { createSupabaseServerClient } from '@/lib/supabase-server';
 import { generateShortCode, isValidUrl, getBaseUrl } from '@/lib/utils';
 import { scanUrl } from '@/lib/scan';
 
@@ -29,16 +29,24 @@ export async function POST(request: NextRequest) {
     const passwordStr = typeof password === 'string' && password.trim() ? password.trim() : null;
     const safeModeVal = safe_mode === true || safe_mode === 'true';
 
-    const supabase = getSupabase();
+    const supabase = await createSupabaseServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
     // Check if this URL was already shortened (only reuse if no password and no safe_mode override)
     if (!passwordStr && !safeModeVal) {
-      const { data: existing } = await supabase
+      let existingQuery = supabase
         .from('urls')
         .select('short_code, safe_mode, scan_status')
         .eq('original_url', trimmedUrl)
-        .is('password_hash', null)
-        .maybeSingle();
+        .is('password_hash', null);
+
+      existingQuery = user
+        ? existingQuery.eq('user_id', user.id)
+        : existingQuery.is('user_id', null);
+
+      const { data: existing } = await existingQuery.maybeSingle();
 
       if (existing) {
         const baseUrl = getBaseUrl();
@@ -71,13 +79,12 @@ export async function POST(request: NextRequest) {
     let attempts = 0;
 
     while (attempts < 5) {
-      const { data: conflict } = await supabase
-        .from('urls')
-        .select('short_code')
-        .eq('short_code', shortCode)
-        .maybeSingle();
+      const [{ data: urlConflict }, { data: pageConflict }] = await Promise.all([
+        supabase.from('urls').select('short_code').eq('short_code', shortCode).maybeSingle(),
+        supabase.from('pages').select('page_code').eq('page_code', shortCode).maybeSingle(),
+      ]);
 
-      if (!conflict) break;
+      if (!urlConflict && !pageConflict) break;
       shortCode = generateShortCode();
       attempts++;
     }
@@ -92,6 +99,7 @@ export async function POST(request: NextRequest) {
         safe_mode: safeModeVal,
         scan_status: scanStatus,
         scanned_at: new Date().toISOString(),
+        user_id: user?.id ?? null,
       })
       .select()
       .single();

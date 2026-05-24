@@ -49,12 +49,15 @@ export default function HistoryList({ refreshTrigger }: HistoryListProps) {
   const loadHistory = useCallback(() => setHistory(getHistory()), []);
 
   useEffect(() => {
-    setMounted(true);
-    loadHistory();
+    queueMicrotask(() => {
+      setMounted(true);
+      loadHistory();
+    });
   }, [loadHistory]);
 
   useEffect(() => {
-    if (mounted) loadHistory();
+    if (!mounted) return;
+    queueMicrotask(loadHistory);
   }, [refreshTrigger, mounted, loadHistory]);
 
   if (!mounted || history.length === 0) return null;

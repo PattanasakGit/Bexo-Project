@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import {
   Link2,
   LogOut,
@@ -35,7 +34,6 @@ interface Props {
 export default function DashboardClient({ user, initialDisplayName, initialLinks }: Props) {
   const { t } = useLanguage();
   const { signOut } = useAuth();
-  const router = useRouter();
   const baseUrl = getBaseUrl();
 
   // Profile state

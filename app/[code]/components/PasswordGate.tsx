@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Lock, Loader2, Eye, EyeOff } from 'lucide-react';
 
 interface PasswordGateProps {
@@ -272,7 +273,7 @@ export default function PasswordGate({ code }: PasswordGateProps) {
               color: 'var(--text-muted, #A08060)',
             }}
           >
-            <a
+            <Link
               href="/"
               style={{
                 color: 'var(--accent, #B8845A)',
@@ -287,7 +288,7 @@ export default function PasswordGate({ code }: PasswordGateProps) {
               }
             >
               ← Back to Bexo
-            </a>
+            </Link>
           </p>
         </div>
       </div>
